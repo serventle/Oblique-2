@@ -24,6 +24,9 @@
             background-image: url('https://grainy-gradients.vercel.app/noise.svg'); 
         }
 
+        .border-heavy { border: 4px solid #fff; }
+        .border-b-heavy { border-bottom: 4px solid #fff; }
+        
         .btn-brutal { 
             background: #fff; color: #000; padding: 20px; font-weight: 900; 
             text-transform: uppercase; transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
@@ -54,6 +57,15 @@
         input:focus { border-color: var(--neon); outline: none; }
 
         .lang-active { color: var(--neon); text-decoration: underline; }
+
+        /* Chaotic Layout Utility */
+        .card-wide { grid-column: span 1; }
+        @media (min-width: 768px) {
+            .card-wide { grid-column: span 2; }
+            .card-tall { grid-row: span 2; }
+            .card-offset-up { transform: translateY(-30px); }
+            .card-offset-down { transform: translateY(50px); }
+        }
     </style>
 </head>
 <body>
@@ -122,21 +134,25 @@
                 <div class="w-full lg:w-3/5 relative bg-zinc-900 group cursor-pointer overflow-hidden" onclick="showArticle('demo1')">
                     <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover img-glitch opacity-80 group-hover:opacity-100">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                    <div class="absolute bottom-12 left-12 right-12">
+                    <div class="absolute bottom-12 left-12 right-12 text-white">
                         <span class="text-[--neon] font-black text-xs uppercase tracking-widest mb-4 block" data-t="featuredTag">Editorial Feature</span>
                         <h2 id="hero-title" class="text-6xl md:text-[8rem] font-display uppercase tracking-tighter leading-none group-hover:italic transition-all">The Concrete Colossus</h2>
                     </div>
                 </div>
             </section>
+
             <div class="marquee-container">
                 <div class="marquee-content text-black font-black" data-t="marqueeText">NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •</div>
             </div>
-            <section class="p-8 md:p-20 bg-white text-black min-h-screen text-left">
-                <div class="flex justify-between items-end mb-20 border-b-8 border-black pb-8">
-                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter" data-t="feedTitle">Media Feed</h2>
+
+            <section class="p-8 md:p-20 bg-white text-black min-h-screen">
+                <div class="flex justify-between items-end mb-24 border-b-8 border-black pb-8">
+                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter text-black" data-t="feedTitle">Media Feed</h2>
                     <span class="font-black text-xs uppercase opacity-30 mb-4 hidden md:block" data-t="scrollHint">Scroll for raw content / 2026</span>
                 </div>
-                <div id="home-feed" class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 text-left"></div>
+                
+                <!-- Chaotic Grid -->
+                <div id="home-feed" class="grid grid-cols-1 md:grid-cols-3 gap-y-24 md:gap-x-12 lg:gap-x-20 grid-flow-dense"></div>
             </section>
         </div>
 
@@ -161,9 +177,9 @@
 
         <!-- ABOUT (MANIFESTO) -->
         <div id="page-about" class="hidden page-fade">
-            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden">
+            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden text-left">
                 <h2 class="text-[25vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none tracking-tighter">MANIFESTO</h2>
-                <div class="max-w-5xl z-10 text-left">
+                <div class="max-w-5xl z-10">
                     <div class="bg-white text-black p-12 md:p-20 mb-20 border-l-[30px] border-[--accent]">
                         <p class="text-4xl md:text-6xl font-display uppercase italic leading-[0.9]" data-t="manifestoQuote">«Мы не делаем контент. Мы фиксируем историю, которую вы привыкли игнорировать.»</p>
                     </div>
@@ -173,7 +189,7 @@
                     </div>
                     <div class="mt-32 space-y-8">
                         <h4 class="text-[--neon] font-black uppercase tracking-[0.4em] text-xs" data-t="commTitle">Communication</h4>
-                        <a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter">oblique.mag@gmail.com</a>
+                        <a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter italic">oblique.mag@gmail.com</a>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16">
                         <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="editorLabel">Editor in Chief</span><span class="text-4xl font-display uppercase">Эльвира Иванникова</span></div>
@@ -193,13 +209,13 @@
 
         <!-- CART -->
         <div id="page-cart" class="hidden page-fade">
-            <section class="p-8 md:p-24 bg-black text-white min-h-screen flex flex-col justify-center">
-                <div class="max-w-4xl mx-auto w-full text-left">
+            <section class="p-8 md:p-24 bg-black text-white min-h-screen flex flex-col justify-center text-left">
+                <div class="max-w-4xl mx-auto w-full">
                     <h2 class="text-7xl md:text-9xl font-display uppercase mb-16 italic tracking-tighter" data-t="cartTitle">Your Order</h2>
                     <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10"></div>
                     <div id="checkout-form-container">
                         <h3 class="text-4xl font-display uppercase mb-10 text-[--neon]" data-t="shippingTitle">Shipping Info</h3>
-                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4">
+                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4 text-left">
                             <input type="text" id="cust-name" placeholder="ФИО / FULL NAME" required>
                             <input type="email" id="cust-email" placeholder="EMAIL" required>
                             <input type="tel" id="cust-phone" placeholder="+7 (___) ___ __ __" required>
@@ -219,7 +235,9 @@
         <div id="page-archive" class="hidden page-fade">
             <section class="p-8 md:p-24 bg-white text-black min-h-screen text-left">
                 <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navArchive">Archives</h2>
-                <div class="space-y-2" id="archive-list"></div>
+                
+                <!-- Chaotic Archive Grid -->
+                <div id="archive-list" class="grid grid-cols-1 md:grid-cols-3 gap-y-24 md:gap-x-12 lg:gap-x-20 grid-flow-dense pt-12"></div>
             </section>
         </div>
     </main>
@@ -266,7 +284,7 @@
                 backBtn: "Back to feed", commTitle: "Communication", editorLabel: "Editor in Chief", creativeLabel: "Creative Direction",
                 manifestoQuote: "«We don't make content. We record the history you're used to ignoring.»",
                 manifestoTitle: "OBLIQUE is a digital archive and a graduation research.",
-                manifestoText: "<p>Our homeland is multi-layered. We uncover the layer of Almaty's underground to show you what remains behind the gloss of shopping malls and the noise of highways.</p><p>OBLIQUE is a platform for those who look for meaning where others see only emptiness. We believe in the aesthetics of the industrial monster and the sincerity of basement raves.</p>",
+                manifestoText: "<p>Our homeland is multi-layered. We uncover the layer of Almaty's underground to show you what remains behind the gloss of shopping malls and the noise of highways. This is an exploration of urban DNA through sound, concrete, and the people who shake it.</p><p>OBLIQUE is a platform for those who look for meaning where others see only emptiness. We believe in the aesthetics of the industrial monster and the sincerity of basement raves.</p>",
                 cartTitle: "Your Order", shippingTitle: "Shipping Info", placeOrder: "Place Order", successTitle: "Success",
                 successMsg: "We will contact you shortly for payment and delivery details.",
                 marqueeText: "NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •",
@@ -276,19 +294,29 @@
 
         const articles = {
             'demo1': { 
-                ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Алматы сегодня — это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей.' },
-                en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. Almaty today is a complex ecosystem read through the underground.\n\nColossus is a place of power, a former printing house where concrete speaks louder than people.' },
+                ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния, выталкивает из себя старые смыслы. Алматы сегодня — это не просто фасады зданий и сетка улиц. Это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей. Мы исследовали каждый этаж этого индустриального монстра.' },
+                en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. It pulsates, changes states, expels old meanings. Almaty today is not just building facades and street grids. It\'s a complex ecosystem read through the underground.\n\nColossus is a place of power, a former printing house where concrete speaks louder than people.' },
                 image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600'
             },
             'demo2': { 
-                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Днем — стерильный бокс для съемок. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом.' },
-                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'By day — a sterile box for shoots. By night — the vibrating reservoir of VIKHOD. Gloss meets red smoke.' },
+                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Днем — стерильный бокс для съемок. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом. Здесь создается новая визуальная культура Казахстана.' },
+                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'By day — a sterile box for shoots. By night — the vibrating reservoir of VIKHOD. Gloss meets red smoke. This is where Kazakhstan\'s new visual culture is born.' },
                 image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200'
             },
             'demo3': { 
                 ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' },
-                en: { title: 'Almaty Rails', cat: 'Places', content: 'The railroad as a border between the past and future of the southern capital. Aesthetics of dead ends.' },
+                en: { title: 'Almaty Rails', cat: 'Places', content: 'The railroad as a border between the past and future of the southern capital. Aesthetics of dead ends and infinite paths.' },
                 image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200'
+            },
+            'demo4': { 
+                ru: { title: 'Ночной Базар', cat: 'Стиль', content: 'Рынок как место пересечения культур. Визуальный шум и честная жизнь ночного города.' },
+                en: { title: 'Night Bazaar', cat: 'Style', content: 'The market as a crossroads of cultures. Visual noise and the honest life of the city at night.' },
+                image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1200'
+            },
+            'demo5': { 
+                ru: { title: 'Техно-Степь', cat: 'Музыка', content: 'Как электронная музыка адаптируется к локальным ландшафтам.' },
+                en: { title: 'Techno-Steppe', cat: 'Music', content: 'How electronic music adapts to local landscapes.' },
+                image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1200'
             }
         };
 
@@ -326,37 +354,52 @@
         }
 
         function showArticle(id) {
-            const content = articles[id][currentLang];
+            const art = articles[id];
+            const content = art[currentLang];
             document.getElementById('art-title').innerText = content.title;
-            document.getElementById('art-image').src = articles[id].image;
+            document.getElementById('art-image').src = art.image;
             document.getElementById('art-content').innerText = content.content;
             showPage('article');
         }
 
         function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
+        const getCardStyle = (index) => {
+            const styles = [
+                'card-wide',
+                'card-tall card-offset-down',
+                'card-offset-up',
+                'card-wide',
+                'card-tall',
+                'card-offset-down'
+            ];
+            return styles[index % styles.length];
+        };
+
         function renderFeed() {
             const feed = document.getElementById('home-feed'); if (!feed) return;
-            feed.innerHTML = Object.entries(articles).slice(1).map(([id, art]) => `
-                <div class="group cursor-pointer" onclick="showArticle('${id}')">
-                    <div class="relative overflow-hidden border-4 border-black aspect-[16/10] mb-8">
+            feed.innerHTML = Object.entries(articles).slice(1).map(([id, art], index) => `
+                <div class="group cursor-pointer text-left ${getCardStyle(index)}" onclick="showArticle('${id}')">
+                    <div class="relative overflow-hidden border-4 border-black aspect-[10/12] md:aspect-auto h-full min-h-[400px] mb-8">
                         <img src="${art.image}" class="w-full h-full object-cover img-glitch">
                         <div class="absolute top-0 right-0 bg-black text-white p-4 font-display text-xl italic">${art[currentLang].cat}</div>
                     </div>
-                    <h3 class="text-5xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors">${art[currentLang].title}</h3>
+                    <h3 class="text-4xl lg:text-5xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
                 </div>
             `).join('');
         }
 
         function renderArchive() {
             const list = document.getElementById('archive-list'); if (!list) return;
-            list.innerHTML = Object.entries(articles).map(([id, art]) => `
-                <div onclick="showArticle('${id}')" class="group border-b-4 border-black/10 py-10 flex items-center justify-between cursor-pointer hover:bg-black hover:text-white px-6 transition-all">
-                    <div class="flex items-center space-x-8">
-                        <span class="font-display text-4xl md:text-7xl uppercase tracking-tighter">${art[currentLang].title}</span>
-                        <span class="hidden md:block bg-black text-white px-3 py-1 font-black text-[10px] uppercase">${art[currentLang].cat}</span>
+            // Using same chaotic grid logic for archive to satisfy "scattered" request
+            list.innerHTML = Object.entries(articles).map(([id, art], index) => `
+                <div class="group cursor-pointer text-left ${getCardStyle(index)}" onclick="showArticle('${id}')">
+                    <div class="relative overflow-hidden border-4 border-black aspect-[10/12] md:aspect-auto h-full min-h-[300px] mb-6">
+                        <img src="${art.image}" class="w-full h-full object-cover img-glitch">
+                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic">${art[currentLang].cat}</div>
                     </div>
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <h3 class="text-3xl lg:text-4xl font-display uppercase leading-none group-hover:text-[--neon] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+                    <p class="text-[10px] font-black uppercase opacity-30 mt-2">Issue 0.1 / Archive</p>
                 </div>
             `).join('');
         }
@@ -364,15 +407,15 @@
         function renderShop() {
             const grid = document.getElementById('shop-grid'); if (!grid) return;
             grid.innerHTML = products.map(p => `
-                <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all flex flex-col justify-between">
+                <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all flex flex-col justify-between text-left">
                     <div>
-                        <div class="aspect-square border-4 border-black mb-8 overflow-hidden relative">
+                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden relative">
                             <img src="${p.img}" class="w-full h-full object-cover mix-blend-multiply grayscale group-hover:grayscale-0 transition-all">
                             <div class="absolute top-0 left-0 bg-black text-white p-2 font-black text-[9px] uppercase tracking-widest">${p.cat}</div>
                         </div>
-                        <h3 class="text-4xl font-display uppercase tracking-tighter text-black">${p[currentLang].name}</h3>
+                        <h3 class="text-4xl font-display uppercase tracking-tighter">${p[currentLang].name}</h3>
                     </div>
-                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black text-black">
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black">
                         <span class="text-2xl font-black">${p.price} ₸</span>
                         <button onclick="addToCart('${p.id}')" class="btn-brutal p-4 px-8 border-2 border-black">${translations[currentLang].addBtn}</button>
                     </div>
@@ -399,11 +442,19 @@
                 let total = 0;
                 list.innerHTML = cart.map((p, index) => {
                     total += p.price;
-                    return `<div class="flex justify-between items-center border-b border-white/20 pb-4">
-                        <div><h4 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h4><span class="text-[--neon] font-black">${p.price} ₸</span></div>
+                    return `<div class="flex justify-between items-center border-b border-white/20 pb-4 text-left">
+                        <div>
+                            <h4 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h4>
+                            <span class="text-[--neon] font-black">${p.price} ₸</span>
+                        </div>
                         <button onclick="removeFromCart(${index})" class="text-[--accent] font-black uppercase text-[10px] underline">${translations[currentLang].remove}</button>
                     </div>`;
-                }).join('') + `<div class="flex justify-between items-end pt-10"><span class="font-display text-4xl uppercase opacity-40 italic">${translations[currentLang].total}</span><span class="text-6xl font-display text-[--neon]">${total} ₸</span></div>`;
+                }).join('') + `
+                    <div class="flex justify-between items-end pt-10 text-white">
+                        <span class="font-display text-4xl uppercase opacity-40 italic">${translations[currentLang].total}</span>
+                        <span class="text-6xl font-display text-[--neon]">${total} ₸</span>
+                    </div>
+                `;
             }
         }
 
@@ -418,7 +469,9 @@
             cart = []; document.getElementById('cart-count').innerText = '0';
         }
 
-        window.onload = () => setLanguage('ru');
+        window.onload = () => {
+            setLanguage('ru');
+        };
     </script>
 </body>
 </html>
