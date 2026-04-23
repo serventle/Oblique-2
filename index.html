@@ -35,8 +35,16 @@
             background: #fff; color: #000; padding: 20px; font-weight: 900; 
             text-transform: uppercase; transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
             display: inline-flex; align-items: center; justify-content: space-between;
+            cursor: pointer;
         }
         .btn-brutal:hover { background: var(--neon); transform: translate(5px, -5px); box-shadow: -5px 5px 0 #fff; }
+
+        .btn-neon {
+            background: var(--neon); color: #000; padding: 15px; font-weight: 900;
+            text-transform: uppercase; border: 3px solid #000; transition: 0.2s;
+            cursor: pointer;
+        }
+        .btn-neon:hover { transform: scale(1.02); box-shadow: 5px 5px 0 #000; }
 
         /* Typography Overlays */
         .text-stroke { -webkit-text-stroke: 1px #fff; color: transparent; }
@@ -50,10 +58,6 @@
         .img-glitch { filter: grayscale(1) contrast(1.2); transition: 0.5s; }
         .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.02); }
 
-        /* Secret Editor Mode */
-        [contenteditable]:focus { outline: none; background: rgba(204, 255, 0, 0.1); }
-        .admin-status { position: fixed; top: 90px; right: 20px; background: var(--accent); color: #fff; padding: 5px 10px; font-size: 10px; font-weight: 900; z-index: 1000; display: none; }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: #000; }
@@ -63,14 +67,17 @@
         /* Page Transitions */
         .page-fade { animation: fadeIn 0.6s ease-both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Form Inputs */
+        input { background: #1a1a1a; border: 2px solid #333; color: #fff; padding: 15px; font-weight: bold; width: 100%; margin-bottom: 15px; }
+        input:focus { border-color: var(--neon); outline: none; }
     </style>
 </head>
 <body>
     <div class="grain"></div>
-    <div id="admin-indicator" class="admin-status">EDITOR MODE: ACTIVE</div>
 
     <!-- NAV -->
-    <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between">
+    <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between text-white">
         <div class="flex items-center space-x-12">
             <a href="#" onclick="showPage('home')" class="text-3xl font-display tracking-tighter hover:text-stroke transition-all">Oblique</a>
             <div class="hidden md:flex space-x-10 text-[10px] font-black uppercase tracking-widest">
@@ -80,11 +87,11 @@
             </div>
         </div>
         <div class="flex items-center space-x-8">
-            <button onclick="showPage('shop')" class="relative group">
+            <button onclick="showPage('cart')" class="relative group">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
                 <span id="cart-count" class="absolute -top-2 -right-3 bg-[--neon] text-black text-[9px] font-black w-5 h-5 rounded-none flex items-center justify-center border-2 border-black">0</span>
             </button>
-            <button class="md:hidden" onclick="toggleMenu()">
+            <button class="md:hidden text-white" onclick="toggleMenu()">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
         </div>
@@ -96,7 +103,7 @@
             <span class="text-4xl font-display uppercase tracking-tighter">Oblique</span>
             <button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
-        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12">
+        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-black">
             <button onclick="showPage('home')" class="text-left hover:italic">Home</button>
             <button onclick="showPage('archive')" class="text-left hover:italic">Archive</button>
             <button onclick="showPage('shop')" class="text-left hover:italic">Shop</button>
@@ -113,10 +120,10 @@
                 <div class="w-full lg:w-2/5 p-8 md:p-16 flex flex-col justify-between bg-black border-r-4 border-white z-10">
                     <div>
                         <div class="inline-block bg-white text-black text-[10px] font-black px-4 py-1 mb-12 uppercase tracking-widest">Issue 0.1 / Spring 2026</div>
-                        <h1 contenteditable="true" onblur="saveData()" class="text-[18vw] lg:text-[12rem] font-display leading-[0.7] tracking-tighter mb-8 italic">
+                        <h1 class="text-[18vw] lg:text-[12rem] font-display leading-[0.7] tracking-tighter mb-8 italic">
                             Under<br>ground<br><span class="text-stroke">Almaty</span>
                         </h1>
-                        <p contenteditable="true" onblur="saveData()" class="max-w-xs text-xs font-bold uppercase opacity-60 leading-relaxed mb-12">
+                        <p class="max-w-xs text-xs font-bold uppercase opacity-60 leading-relaxed mb-12">
                             Первый цифровой архив андеграундной сцены. Мы фиксируем то, что другие боятся заметить.
                         </p>
                     </div>
@@ -137,7 +144,7 @@
 
             <!-- MARQUEE -->
             <div class="marquee-container">
-                <div class="marquee-content">
+                <div class="marquee-content text-black font-black">
                     NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •
                 </div>
             </div>
@@ -145,12 +152,11 @@
             <!-- FEED -->
             <section class="p-8 md:p-20 bg-white text-black min-h-screen">
                 <div class="flex justify-between items-end mb-20 border-b-8 border-black pb-8">
-                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter">Media Feed</h2>
+                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter text-black">Media Feed</h2>
                     <span class="font-black text-xs uppercase opacity-30 mb-4 hidden md:block">Scroll for raw content / 2026</span>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20">
-                    <!-- Art 1 -->
                     <div class="group cursor-pointer" onclick="showArticle('demo2')">
                         <div class="relative overflow-hidden border-4 border-black aspect-[16/10] mb-8">
                             <img src="https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover img-glitch">
@@ -159,7 +165,6 @@
                         <h3 class="text-5xl font-display uppercase leading-none group-hover:text-[--accent]">Tulpan Berlin: Red Smoke</h3>
                         <p class="mt-4 text-xs font-bold uppercase opacity-50 max-w-md">Внутри самой закрытой студии города. Когда статусность превращается в пыль.</p>
                     </div>
-                    <!-- Art 2 -->
                     <div class="group cursor-pointer mt-12 md:mt-32" onclick="showArticle('demo3')">
                         <div class="relative overflow-hidden border-4 border-black aspect-[3/4] mb-8">
                             <img src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover img-glitch">
@@ -185,7 +190,7 @@
                             Back to Almaty
                         </button>
                         <h1 id="art-title" class="text-6xl md:text-[9rem] font-display uppercase leading-[0.8] mb-16 tracking-tighter">Title</h1>
-                        <div id="art-content" contenteditable="true" onblur="saveData()" class="font-sans text-xl md:text-2xl leading-relaxed opacity-90 space-y-12 text-justify">
+                        <div id="art-content" class="font-sans text-xl md:text-2xl leading-relaxed opacity-90 space-y-12 text-justify">
                             Loading...
                         </div>
                         <div class="mt-24 border-t-4 border-white pt-12 flex justify-between font-black text-[10px] uppercase opacity-40">
@@ -208,11 +213,19 @@
                         </p>
                     </div>
                     <p class="text-3xl md:text-5xl font-sans font-black uppercase tracking-tight leading-none mb-12">
-                        OBLIQUE — это результат дипломного исследования. 
+                        OBLIQUE — это результат дипломного исследования и начало большого архива.
                     </p>
-                    <p class="text-xl opacity-60 leading-relaxed max-w-2xl uppercase font-bold">
-                        Наша родина многослойна. Мы приоткрываем пласт андеграунда Алматы, чтобы показать вам то, что остается за блеском ТРЦ и шумом магистралей.
-                    </p>
+                    <div class="space-y-8 text-xl opacity-80 leading-relaxed max-w-3xl uppercase font-bold text-justify">
+                        <p>Наша родина многослойна. Мы приоткрываем пласт андеграунда Алматы, чтобы показать вам то, что остается за блеском ТРЦ и шумом магистралей. Это исследование городской ДНК через звук, бетон и людей, которые его шатают.</p>
+                        <p>OBLIQUE — это платформа для тех, кто ищет смыслы там, где остальные видят только пустоту. Мы верим в эстетику индустриального монстра и искренность подвальных рейвов.</p>
+                    </div>
+                    
+                    <div class="mt-20 space-y-6">
+                        <h4 class="text-[--neon] font-black uppercase tracking-[0.3em]">Contacts</h4>
+                        <a href="mailto:oblique.mag@gmail.com" class="text-3xl md:text-5xl font-display hover:text-[--accent] block">oblique.mag@gmail.com</a>
+                        <a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank" class="text-3xl md:text-5xl font-display hover:text-[--neon] block">@obliquejournal</a>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-32 border-t-4 border-white pt-16">
                         <div>
                             <span class="text-[--neon] font-black text-[10px] uppercase block mb-4">Editor in Chief</span>
@@ -230,62 +243,91 @@
         <!-- PAGE: SHOP (HIDDEN) -->
         <div id="page-shop" class="hidden page-fade">
             <section class="p-8 md:p-24 bg-white text-black min-h-screen">
-                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8">Stockroom</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all">
-                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mix-blend-multiply grayscale">
-                        </div>
-                        <h3 class="text-4xl font-display uppercase">Oblique #0.1</h3>
-                        <div class="flex justify-between items-center mt-8 pt-8 border-t-4 border-black">
-                            <span class="text-2xl font-black">5000 ₸</span>
-                            <button onclick="addToCart()" class="btn-brutal p-4 px-8">Add</button>
-                        </div>
+                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8 text-black">Stockroom</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="shop-grid">
+                    <!-- Dynamic Items -->
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE: CART / CHECKOUT (HIDDEN) -->
+        <div id="page-cart" class="hidden page-fade">
+            <section class="p-8 md:p-24 bg-black text-white min-h-screen">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-7xl font-display uppercase mb-12 italic tracking-tighter">Your Order</h2>
+                    <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10">
+                        <!-- List of items -->
                     </div>
-                    <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all">
-                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mix-blend-multiply grayscale">
-                        </div>
-                        <h3 class="text-4xl font-display uppercase">Hoodie 'BETON'</h3>
-                        <div class="flex justify-between items-center mt-8 pt-8 border-t-4 border-black">
-                            <span class="text-2xl font-black">18000 ₸</span>
-                            <button onclick="addToCart()" class="btn-brutal p-4 px-8">Add</button>
-                        </div>
+
+                    <div id="checkout-form-container">
+                        <h3 class="text-4xl font-display uppercase mb-8 text-[--neon]">Shipping Info</h3>
+                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-2">
+                            <input type="text" id="cust-name" placeholder="FULL NAME" required>
+                            <input type="email" id="cust-email" placeholder="EMAIL" required>
+                            <input type="tel" id="cust-phone" placeholder="PHONE NUMBER (e.g. +7...)" required>
+                            <button type="submit" class="btn-brutal w-full mt-8">
+                                <span>Place Order</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </form>
                     </div>
-                    <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all">
-                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mix-blend-multiply grayscale">
-                        </div>
-                        <h3 class="text-4xl font-display uppercase">Tote 'OBLIQUE'</h3>
-                        <div class="flex justify-between items-center mt-8 pt-8 border-t-4 border-black">
-                            <span class="text-2xl font-black">8000 ₸</span>
-                            <button onclick="addToCart()" class="btn-brutal p-4 px-8">Add</button>
-                        </div>
+                    <div id="checkout-success" class="hidden text-center py-20">
+                        <h3 class="text-6xl font-display uppercase text-[--neon] mb-6">Success</h3>
+                        <p class="text-xl font-bold uppercase opacity-60">We will contact you shortly for payment and delivery details.</p>
+                        <button onclick="showPage('home')" class="mt-12 text-white font-black uppercase underline tracking-widest">Back to main</button>
                     </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE: ARCHIVE (HIDDEN) -->
+        <div id="page-archive" class="hidden page-fade">
+            <section class="p-8 md:p-24 bg-white text-black min-h-screen">
+                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8 text-black">Archives</h2>
+                <div class="space-y-2" id="archive-list">
+                    <!-- Dynamic Articles -->
                 </div>
             </section>
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="p-12 md:p-24 border-t-4 border-white bg-black">
+    <footer class="p-12 md:p-24 border-t-4 border-white bg-black text-white">
         <h3 class="text-[20vw] font-display leading-[0.6] mb-20 hover:text-stroke cursor-pointer transition-all" onclick="showPage('home')">Oblique</h3>
         <div class="flex flex-col md:flex-row justify-between items-end gap-16 font-black text-[12px] uppercase tracking-[0.4em] opacity-40 border-t-4 border-white pt-20">
             <p>© 2026 OBLIQUE JOURNAL. ALMATY CITY. ALL RIGHTS RESERVED.</p>
-            <div class="flex space-x-12"><span>Insta</span><span>Facebook</span></div>
+            <div class="flex space-x-12">
+                <a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank" class="hover:text-[--neon]">Instagram</a>
+                <a href="mailto:oblique.mag@gmail.com" class="hover:text-[--neon]">oblique.mag@gmail.com</a>
+            </div>
         </div>
     </footer>
 
     <script>
         const articles = {
-            'demo1': { title: 'Concrete Colossus', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния, выталкивает из себя старые смыслы. Алматы сегодня — это не просто фасады зданий и сетка улиц. Это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей. Мы исследовали каждый этаж этого индустриального монстра.' },
-            'demo2': { title: 'Tulpan Berlin', image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200', content: 'Днем — стерильный бокс для съемок Bazaar. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом. Здесь создается новая визуальная культура Казахстана.' },
-            'demo3': { title: 'Almaty Rails', image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' }
+            'demo1': { title: 'Concrete Colossus', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600', cat: 'Editorial', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния, выталкивает из себя старые смыслы. Алматы сегодня — это не просто фасады зданий и сетка улиц. Это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей. Мы исследовали каждый этаж этого индустриального монстра.' },
+            'demo2': { title: 'Tulpan Berlin', image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200', cat: 'Culture', content: 'Днем — стерильный бокс для съемок Bazaar. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом. Здесь создается новая визуальная культура Казахстана.' },
+            'demo3': { title: 'Almaty Rails', image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200', cat: 'Places', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' }
         };
+
+        const products = [
+            { id: 'p1', name: "Oblique #0.1", price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT" },
+            { id: 'p2', name: "Hoodie 'BETON'", price: 18000, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", cat: "APPAREL" },
+            { id: 'p3', name: "Tote 'OBLIQUE'", price: 8000, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800", cat: "ACCESSORIES" }
+        ];
+
+        let cart = [];
+
+        function init() {
+            renderArchive();
+            renderShop();
+            updateCartCount();
+        }
 
         function showPage(id) {
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
             document.getElementById('page-' + id).classList.remove('hidden');
+            if(id === 'cart') renderCart();
             window.scrollTo(0, 0);
         }
 
@@ -301,27 +343,104 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        let cart = 0;
-        function addToCart() {
-            cart++;
-            document.getElementById('cart-count').innerText = cart;
+        function renderArchive() {
+            const list = document.getElementById('archive-list');
+            list.innerHTML = Object.entries(articles).map(([id, art]) => `
+                <div onclick="showArticle('${id}')" class="group border-b-4 border-black/10 py-10 flex items-center justify-between cursor-pointer hover:bg-black hover:text-white px-6 transition-all duration-300">
+                    <div class="flex items-center space-x-8">
+                        <span class="font-display text-4xl md:text-7xl uppercase tracking-tighter">${art.title}</span>
+                        <span class="hidden md:block bg-black text-white group-hover:bg-white group-hover:text-black px-3 py-1 font-black text-[10px] uppercase">${art.cat}</span>
+                    </div>
+                    <svg class="opacity-20 group-hover:opacity-100 group-hover:translate-x-4 transition-all" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            `).join('');
         }
 
-        // --- EDITOR MODE: PRESS 'E' + 'D' ---
-        let keys = {};
-        window.addEventListener('keydown', e => {
-            keys[e.key.toLowerCase()] = true;
-            if (keys['e'] && keys['d']) {
-                const isEnabled = document.body.contentEditable === 'true';
-                document.body.contentEditable = !isEnabled;
-                document.getElementById('admin-indicator').style.display = isEnabled ? 'none' : 'block';
+        function renderShop() {
+            const grid = document.getElementById('shop-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden relative">
+                            <img src="${p.img}" class="w-full h-full object-cover mix-blend-multiply grayscale group-hover:grayscale-0 transition-all">
+                            <div class="absolute top-0 left-0 bg-black text-white p-2 font-black text-[9px] uppercase tracking-widest">${p.cat}</div>
+                        </div>
+                        <h3 class="text-4xl font-display uppercase tracking-tighter">${p.name}</h3>
+                    </div>
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black">
+                        <span class="text-2xl font-black">${p.price} ₸</span>
+                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-4 px-8 border-2 border-black">Add</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const prod = products.find(p => p.id === id);
+            cart.push(prod);
+            updateCartCount();
+            // Subtle feedback
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = 'Added';
+            setTimeout(() => btn.innerText = originalText, 1000);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items-list');
+            const form = document.getElementById('checkout-form-container');
+            const success = document.getElementById('checkout-success');
+            
+            form.classList.remove('hidden');
+            success.classList.add('hidden');
+
+            if (cart.length === 0) {
+                list.innerHTML = '<p class="text-2xl font-black opacity-30 uppercase italic">Your cart is empty.</p>';
+                document.getElementById('checkout-form').classList.add('hidden');
+            } else {
+                document.getElementById('checkout-form').classList.remove('hidden');
+                let total = 0;
+                list.innerHTML = cart.map((p, index) => {
+                    total += p.price;
+                    return `
+                        <div class="flex justify-between items-center border-b border-white/20 pb-4">
+                            <div>
+                                <h4 class="text-3xl font-display uppercase tracking-tighter">${p.name}</h4>
+                                <span class="text-[--neon] font-black">${p.price} ₸</span>
+                            </div>
+                            <button onclick="removeFromCart(${index})" class="text-[--accent] font-black uppercase text-[10px] underline">Remove</button>
+                        </div>
+                    `;
+                }).join('') + `
+                    <div class="flex justify-between items-end pt-10">
+                        <span class="font-display text-4xl uppercase opacity-40 italic">Total</span>
+                        <span class="text-6xl font-display text-[--neon]">${total} ₸</span>
+                    </div>
+                `;
             }
-        });
-        window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-        function saveData() {
-            localStorage.setItem('oblique_cache', document.getElementById('content').innerHTML);
         }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            renderCart();
+        }
+
+        function handleCheckout(e) {
+            e.preventDefault();
+            // In a real app, send data to backend. Here we simulate success.
+            document.getElementById('checkout-form-container').classList.add('hidden');
+            document.getElementById('cart-items-list').innerHTML = '';
+            document.getElementById('checkout-success').classList.remove('hidden');
+            cart = [];
+            updateCartCount();
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
