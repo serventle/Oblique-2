@@ -40,7 +40,7 @@
         .marquee-content { display: inline-block; animation: scroll 20s linear infinite; font-weight: 900; text-transform: uppercase; font-size: 14px; letter-spacing: 0.2em; }
 
         .img-glitch { filter: grayscale(1) contrast(1.1); transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.03); }
+        .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.05); }
 
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: #000; }
@@ -55,7 +55,7 @@
 
         .lang-active { color: var(--neon); text-decoration: underline; }
 
-        /* Clean Editorial Grid */
+        /* Editorial Grid System */
         .grid-editorial {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
@@ -64,27 +64,46 @@
         @media (min-width: 1024px) {
             .grid-editorial {
                 grid-template-columns: repeat(12, 1fr);
-                gap: 4rem 2rem;
+                gap: 8rem 2rem;
+                align-items: start;
             }
-            /* Позиционирование без наложений */
-            .item-hero-sub { grid-column: 2 / span 10; }
             .item-left { grid-column: 1 / span 7; }
-            .item-right { grid-column: 8 / span 5; margin-top: 10rem; }
+            .item-right { grid-column: 8 / span 5; margin-top: 12rem; }
             .item-center { grid-column: 3 / span 8; }
             .item-wide { grid-column: 1 / span 12; }
             .item-split-left { grid-column: 1 / span 5; }
-            .item-split-right { grid-column: 6 / span 7; margin-top: 5rem; }
+            .item-split-right { grid-column: 6 / span 7; margin-top: 6rem; }
         }
 
-        .aspect-editorial { aspect-ratio: 4 / 5; object-fit: cover; }
-        .aspect-wide { aspect-ratio: 16 / 9; object-fit: cover; }
-        .aspect-square { aspect-ratio: 1 / 1; object-fit: cover; }
+        /* Buffalo Style Collage Grid (Archive) */
+        .grid-collage {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
+            border: 2px solid #fff;
+            background: #fff;
+        }
+        @media (min-width: 768px) { .grid-collage { grid-template-columns: repeat(4, 1fr); } }
+        
+        .collage-item { position: relative; overflow: hidden; cursor: pointer; background: #000; }
+        .collage-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.8);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 30px; opacity: 0; transition: 0.4s; z-index: 10;
+        }
+        .collage-item:hover .collage-overlay { opacity: 1; }
+        .collage-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .collage-item:hover img { transform: scale(1.1); filter: grayscale(0); }
+
+        .aspect-editorial { aspect-ratio: 4 / 5; }
+        .aspect-wide { aspect-ratio: 16 / 9; }
+        .aspect-square { aspect-ratio: 1 / 1; }
     </style>
 </head>
 <body>
     <div class="grain"></div>
 
-    <!-- NAV -->
+    <!-- NAVIGATION -->
     <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between">
         <div class="flex items-center space-x-12 text-white">
             <a href="#" onclick="showPage('home')" class="text-3xl font-display tracking-tighter hover:text-stroke transition-all">Oblique</a>
@@ -113,11 +132,11 @@
 
     <!-- MOBILE MENU -->
     <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden">
-        <div class="flex justify-between items-center border-b-8 border-black pb-6 text-black">
+        <div class="flex justify-between items-center border-b-8 border-black pb-6">
             <span class="text-4xl font-display uppercase tracking-tighter">Oblique</span>
             <button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
-        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left text-black">
+        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left">
             <button onclick="showPage('home')" data-t="navHome">Home</button>
             <button onclick="showPage('archive')" data-t="navArchive">Archive</button>
             <button onclick="showPage('shop')" data-t="navShop">Shop</button>
@@ -126,7 +145,7 @@
     </div>
 
     <main id="content" class="pt-20">
-        <!-- HOME -->
+        <!-- PAGE: HOME -->
         <div id="page-home" class="page-fade">
             <section class="relative min-h-screen flex flex-col lg:flex-row border-b-4 border-white text-white">
                 <div class="w-full lg:w-2/5 p-8 md:p-16 flex flex-col justify-between bg-black border-r-4 border-white z-10">
@@ -158,19 +177,16 @@
                 <div class="marquee-content text-black font-black" data-t="marqueeText">NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •</div>
             </div>
 
-            <section class="p-8 md:p-20 bg-white text-black min-h-screen">
+            <section class="p-8 md:p-20 bg-white text-black min-h-screen text-left">
                 <div class="flex justify-between items-end mb-32 border-b-8 border-black pb-8">
                     <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter" data-t="feedTitle">Media Feed</h2>
                     <span class="font-black text-xs uppercase opacity-30 mb-4 hidden md:block" data-t="scrollHint">Scroll for raw content / 2026</span>
                 </div>
-                
-                <div id="home-feed" class="grid-editorial">
-                    <!-- Dynamic Grid Content -->
-                </div>
+                <div id="home-feed" class="grid-editorial"></div>
             </section>
         </div>
 
-        <!-- ARTICLE -->
+        <!-- PAGE: ARTICLE -->
         <div id="page-article" class="hidden page-fade">
             <section class="min-h-screen bg-black text-white">
                 <div class="flex flex-col lg:flex-row">
@@ -189,7 +205,7 @@
             </section>
         </div>
 
-        <!-- ABOUT (MANIFESTO) -->
+        <!-- PAGE: ABOUT (MANIFESTO) -->
         <div id="page-about" class="hidden page-fade text-left">
             <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden">
                 <h2 class="text-[25vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none tracking-tighter">MANIFESTO</h2>
@@ -213,7 +229,7 @@
             </section>
         </div>
 
-        <!-- SHOP -->
+        <!-- PAGE: SHOP -->
         <div id="page-shop" class="hidden page-fade text-black">
             <section class="p-8 md:p-24 bg-white min-h-screen text-left">
                 <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navShop">Stockroom</h2>
@@ -221,7 +237,7 @@
             </section>
         </div>
 
-        <!-- CART -->
+        <!-- PAGE: CART -->
         <div id="page-cart" class="hidden page-fade">
             <section class="p-8 md:p-24 bg-black text-white min-h-screen flex flex-col justify-center text-left">
                 <div class="max-w-4xl mx-auto w-full">
@@ -245,11 +261,13 @@
             </section>
         </div>
 
-        <!-- ARCHIVE -->
+        <!-- PAGE: ARCHIVE -->
         <div id="page-archive" class="hidden page-fade text-left">
-            <section class="p-8 md:p-24 bg-white text-black min-h-screen">
-                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navArchive">Archives</h2>
-                <div id="archive-list" class="grid-editorial mt-12"></div>
+            <section class="bg-black min-h-screen">
+                <div class="p-8 md:p-24 border-b-4 border-white bg-white text-black">
+                    <h2 class="text-[12vw] font-display uppercase tracking-tighter leading-none" data-t="navArchive">Archives</h2>
+                </div>
+                <div id="archive-collage" class="grid-collage"></div>
             </section>
         </div>
     </main>
@@ -265,9 +283,9 @@
                     <a href="mailto:oblique.mag@gmail.com" class="hover:underline">Email</a>
                 </div>
             </div>
-            <div class="flex space-x-12">
-                <span>RAW ARCHIVE</span>
-                <span>NOISE MEDIA</span>
+            <div class="flex space-x-12 uppercase text-[8px] font-black opacity-60">
+                <span>Raw Archive</span>
+                <span>Noise Media</span>
             </div>
         </div>
     </footer>
@@ -305,46 +323,21 @@
         };
 
         const articles = [
-            { 
-                id: 'demo1',
-                ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния. Колосс — это место силы, бывший дом печати, где бетон говорит громче людей.' },
-                en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. It pulsates, changes states. Colossus is a place of power, a former printing house where concrete speaks louder than people.' },
-                image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600'
-            },
-            { 
-                id: 'demo2',
-                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Днем — стерильный бокс для съемок. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом.' },
-                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'By day — a sterile box for shoots. By night — the vibrating reservoir of VIKHOD. Gloss meets red smoke.' },
-                image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200'
-            },
-            { 
-                id: 'demo3',
-                ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' },
-                en: { title: 'Almaty Rails', cat: 'Places', content: 'The railroad as a border between the past and future of the southern capital.' },
-                image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200'
-            },
-            { 
-                id: 'demo4',
-                ru: { title: 'Ночной Базар', cat: 'Стиль', content: 'Рынок как место пересечения культур. Визуальный шум и честная жизнь ночного города.' },
-                en: { title: 'Night Bazaar', cat: 'Style', content: 'The market as a crossroads of cultures. Visual noise and the honest life of the city at night.' },
-                image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1200'
-            },
-            { 
-                id: 'demo5',
-                ru: { title: 'Техно-Степь', cat: 'Музыка', content: 'Как электронная музыка адаптируется к локальным ландшафтам.' },
-                en: { title: 'Techno-Steppe', cat: 'Music', content: 'How electronic music adapts to local landscapes.' },
-                image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1200'
-            }
+            { id: 'demo1', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600', ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния.' }, en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. It pulsates, changes states.' } },
+            { id: 'demo2', image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Глянец встречается с красным дымом. Здесь создается новая визуальная культура Казахстана.' }, en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'Gloss meets red smoke. This is where new visual culture is born.' } },
+            { id: 'demo3', image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Эстетика тупиков и бесконечных путей.' }, en: { title: 'Almaty Rails', cat: 'Places', content: 'Aesthetics of dead ends and infinite paths.' } },
+            { id: 'demo4', image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Ночной Базар', cat: 'Стиль', content: 'Место пересечения культур.' }, en: { title: 'Night Bazaar', cat: 'Style', content: 'Crossroads of cultures.' } },
+            { id: 'demo5', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Техно-Степь', cat: 'Музыка', content: 'Адаптация электроники к ландшафту.' }, en: { title: 'Techno-Steppe', cat: 'Music', content: 'Electronic music and landscapes.' } },
+            { id: 'demo6', image: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Сырой Алматы', cat: 'Архив', content: 'Эстетика панелек и дворов.' }, en: { title: 'Raw Almaty', cat: 'Archive', content: 'Esthetics of concrete blocks.' } }
         ];
 
         const products = [
-            { id: 'p1', ru: {name: "Oblique Выпуск #0.1"}, en: {name: "Oblique Issue #0.1"}, price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT" },
-            { id: 'p2', ru: {name: "Худи 'БЕТОН'"}, en: {name: "Hoodie 'BETON'"}, price: 18000, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", cat: "APPAREL" },
-            { id: 'p3', ru: {name: "Шоппер 'OBLIQUE'"}, en: {name: "Tote Bag 'OBLIQUE'"}, price: 8000, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800", cat: "ACCESSORIES" }
+            { id: 'p1', price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT", ru: {name: "Oblique Выпуск #0.1"}, en: {name: "Oblique Issue #0.1"} },
+            { id: 'p2', price: 18000, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", cat: "APPAREL", ru: {name: "Худи 'БЕТОН'"}, en: {name: "Hoodie 'BETON'"} },
+            { id: 'p3', price: 8000, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800", cat: "ACCESSORIES", ru: {name: "Шоппер 'OBLIQUE'"}, en: {name: "Tote Bag 'OBLIQUE'"} }
         ];
 
-        let currentLang = 'ru';
-        let cart = [];
+        let currentLang = 'ru'; let cart = [];
 
         function setLanguage(lang) {
             currentLang = lang;
@@ -359,10 +352,7 @@
             renderFeed(); renderArchive(); renderShop(); updateHero();
         }
 
-        function updateHero() { 
-            const titleEl = document.getElementById('hero-title');
-            if (titleEl) titleEl.innerText = articles[0][currentLang].title; 
-        }
+        function updateHero() { document.getElementById('hero-title').innerText = articles[0][currentLang].title; }
 
         function showPage(id) {
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
@@ -385,14 +375,7 @@
         function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         const getEditorialClasses = (index) => {
-            const pattern = [
-                'item-left', 
-                'item-right', 
-                'item-center', 
-                'item-split-left', 
-                'item-split-right',
-                'item-wide'
-            ];
+            const pattern = ['item-left', 'item-right', 'item-center', 'item-split-left', 'item-split-right', 'item-wide'];
             return pattern[index % pattern.length];
         };
 
@@ -402,8 +385,7 @@
         };
 
         function renderFeed() {
-            const feed = document.getElementById('home-feed');
-            if (!feed) return;
+            const feed = document.getElementById('home-feed'); if (!feed) return;
             feed.innerHTML = articles.slice(1).map((art, index) => `
                 <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
                     <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-8">
@@ -419,24 +401,20 @@
         }
 
         function renderArchive() {
-            const list = document.getElementById('archive-list');
-            if (!list) return;
-            list.innerHTML = articles.map((art, index) => `
-                <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
-                    <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-6">
-                        <img src="${art.image}" class="w-full h-full object-cover img-glitch">
-                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic z-10">${art[currentLang].cat}</div>
-                    </div>
-                    <div class="max-w-xl">
-                        <h3 class="text-4xl lg:text-5xl font-display uppercase leading-none group-hover:text-[--neon] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+            const collage = document.getElementById('archive-collage'); if (!collage) return;
+            const aspects = ['aspect-square', 'aspect-editorial', 'aspect-wide', 'aspect-editorial', 'aspect-square', 'aspect-wide'];
+            collage.innerHTML = articles.map((art, index) => `
+                <div class="collage-item group" onclick="showArticle('${art.id}')">
+                    <img src="${art.image}" class="${aspects[index % aspects.length]}">
+                    <div class="collage-overlay">
+                        <h3 class="text-2xl md:text-5xl font-display uppercase italic text-white tracking-tighter leading-none">${art[currentLang].title}</h3>
                     </div>
                 </div>
             `).join('');
         }
 
         function renderShop() {
-            const grid = document.getElementById('shop-grid');
-            if (!grid) return;
+            const grid = document.getElementById('shop-grid'); if (!grid) return;
             grid.innerHTML = products.map(p => `
                 <div class="group border-4 border-black p-8 hover:bg-[--neon] transition-all flex flex-col justify-between text-black">
                     <div>
@@ -446,27 +424,22 @@
                         </div>
                         <h3 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h3>
                     </div>
-                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black text-black">
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black">
                         <span class="text-2xl font-black">${p.price} ₸</span>
-                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-3 px-6 border-2 border-black">${translations[currentLang].addBtn}</button>
+                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-3 px-6 border-2 border-black text-black">${translations[currentLang].addBtn}</button>
                     </div>
                 </div>
             `).join('');
         }
 
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            document.getElementById('cart-count').innerText = cart.length;
-            const btn = event.target;
-            const orig = btn.innerText;
-            btn.innerText = '✓';
+            cart.push(products.find(p => p.id === id)); document.getElementById('cart-count').innerText = cart.length;
+            const btn = event.target; const orig = btn.innerText; btn.innerText = '✓';
             setTimeout(() => btn.innerText = orig, 1000);
         }
 
         function renderCart() {
-            const list = document.getElementById('cart-items-list');
-            if (!list) return;
+            const list = document.getElementById('cart-items-list'); if (!list) return;
             document.getElementById('checkout-form-container').classList.remove('hidden');
             document.getElementById('checkout-success').classList.add('hidden');
             if (cart.length === 0) {
@@ -478,40 +451,24 @@
                 list.innerHTML = cart.map((p, index) => {
                     total += p.price;
                     return `<div class="flex justify-between items-center border-b border-white/20 pb-4 text-left">
-                        <div>
-                            <h4 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h4>
-                            <span class="text-[--neon] font-black">${p.price} ₸</span>
-                        </div>
+                        <div><h4 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h4><span class="text-[--neon] font-black">${p.price} ₸</span></div>
                         <button onclick="removeFromCart(${index})" class="text-[--accent] font-black uppercase text-[10px] underline">${translations[currentLang].remove}</button>
                     </div>`;
-                }).join('') + `
-                    <div class="flex justify-between items-end pt-10 text-white">
-                        <span class="font-display text-4xl uppercase opacity-40 italic">${translations[currentLang].total}</span>
-                        <span class="text-6xl font-display text-[--neon]">${total} ₸</span>
-                    </div>
-                `;
+                }).join('') + `<div class="flex justify-between items-end pt-10 text-white"><span class="font-display text-4xl uppercase opacity-40 italic">${translations[currentLang].total}</span><span class="text-6xl font-display text-[--neon]">${total} ₸</span></div>`;
             }
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            document.getElementById('cart-count').innerText = cart.length;
-            renderCart();
-        }
+        function removeFromCart(index) { cart.splice(index, 1); document.getElementById('cart-count').innerText = cart.length; renderCart(); }
 
         function handleCheckout(e) {
             e.preventDefault();
             document.getElementById('checkout-form-container').classList.add('hidden');
             document.getElementById('cart-items-list').innerHTML = '';
             document.getElementById('checkout-success').classList.remove('hidden');
-            document.getElementById('checkout-success').querySelector('p').innerText = translations[currentLang].successMsg;
-            cart = [];
-            document.getElementById('cart-count').innerText = '0';
+            cart = []; document.getElementById('cart-count').innerText = '0';
         }
 
-        window.onload = () => {
-            setLanguage('ru');
-        };
+        window.onload = () => setLanguage('ru');
     </script>
 </body>
 </html>
