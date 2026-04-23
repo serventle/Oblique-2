@@ -9,7 +9,6 @@
     <style>
         :root { --neon: #CCFF00; --accent: #FF00FF; }
         
-        /* Reset & Base */
         body { 
             background-color: #0e0e0e; 
             color: #ffffff; 
@@ -20,17 +19,11 @@
 
         .font-display { font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 0.8; }
         
-        /* Grain & Noise Texture */
         .grain { 
             position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.08; 
             background-image: url('https://grainy-gradients.vercel.app/noise.svg'); 
         }
 
-        /* Hard Brutalism UI */
-        .border-heavy { border: 4px solid #fff; }
-        .border-b-heavy { border-bottom: 4px solid #fff; }
-        .border-r-heavy { border-right: 4px solid #fff; }
-        
         .btn-brutal { 
             background: #fff; color: #000; padding: 20px; font-weight: 900; 
             text-transform: uppercase; transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
@@ -39,18 +32,9 @@
         }
         .btn-brutal:hover { background: var(--neon); transform: translate(5px, -5px); box-shadow: -5px 5px 0 #fff; }
 
-        .btn-neon {
-            background: var(--neon); color: #000; padding: 15px; font-weight: 900;
-            text-transform: uppercase; border: 3px solid #000; transition: 0.2s;
-            cursor: pointer;
-        }
-        .btn-neon:hover { transform: scale(1.02); box-shadow: 5px 5px 0 #000; }
-
-        /* Typography Overlays */
         .text-stroke { -webkit-text-stroke: 1px #fff; color: transparent; }
         .text-stroke:hover { color: #fff; }
 
-        /* Animations */
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-container { overflow: hidden; white-space: nowrap; background: var(--neon); color: #000; padding: 15px 0; border-y: 4px solid #000; }
         .marquee-content { display: inline-block; animation: scroll 20s linear infinite; font-weight: 900; text-transform: uppercase; font-size: 14px; letter-spacing: 0.2em; }
@@ -58,77 +42,80 @@
         .img-glitch { filter: grayscale(1) contrast(1.2); transition: 0.5s; }
         .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.02); }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; border: 3px solid #000; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon); }
 
-        /* Page Transitions */
         .page-fade { animation: fadeIn 0.6s ease-both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Form Inputs */
-        input { background: #1a1a1a; border: 2px solid #333; color: #fff; padding: 15px; font-weight: bold; width: 100%; margin-bottom: 15px; }
+        input { background: #1a1a1a; border: 2px solid #333; color: #fff; padding: 15px; font-weight: bold; width: 100%; margin-bottom: 15px; border-radius: 0; }
         input:focus { border-color: var(--neon); outline: none; }
+
+        .lang-active { color: var(--neon); text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="grain"></div>
 
     <!-- NAV -->
-    <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between text-white">
-        <div class="flex items-center space-x-12">
+    <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between">
+        <div class="flex items-center space-x-12 text-white">
             <a href="#" onclick="showPage('home')" class="text-3xl font-display tracking-tighter hover:text-stroke transition-all">Oblique</a>
             <div class="hidden md:flex space-x-10 text-[10px] font-black uppercase tracking-widest">
-                <button onclick="showPage('archive')" class="hover:text-[--neon]">Archive</button>
-                <button onclick="showPage('shop')" class="hover:text-[--neon]">Stockroom</button>
-                <button onclick="showPage('about')" class="hover:text-[--neon]">Manifesto</button>
+                <button onclick="showPage('archive')" data-t="navArchive">Архив</button>
+                <button onclick="showPage('shop')" data-t="navShop">Stockroom</button>
+                <button onclick="showPage('about')" data-t="navAbout">Манифест</button>
             </div>
         </div>
-        <div class="flex items-center space-x-8">
+        <div class="flex items-center space-x-8 text-white">
+            <div class="flex space-x-3 text-[10px] font-black uppercase tracking-tighter">
+                <button onclick="setLanguage('ru')" id="lang-ru" class="lang-active">RU</button>
+                <span class="opacity-20">/</span>
+                <button onclick="setLanguage('en')" id="lang-en">EN</button>
+            </div>
+            
             <button onclick="showPage('cart')" class="relative group">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                <span id="cart-count" class="absolute -top-2 -right-3 bg-[--neon] text-black text-[9px] font-black w-5 h-5 rounded-none flex items-center justify-center border-2 border-black">0</span>
+                <span id="cart-count" class="absolute -top-2 -right-3 bg-[--neon] text-black text-[9px] font-black w-5 h-5 flex items-center justify-center border-2 border-black">0</span>
             </button>
-            <button class="md:hidden text-white" onclick="toggleMenu()">
+            <button class="md:hidden" onclick="toggleMenu()">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
         </div>
     </nav>
 
-    <!-- MOBILE OVERLAY -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden overflow-hidden">
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden">
         <div class="flex justify-between items-center border-b-8 border-black pb-6">
             <span class="text-4xl font-display uppercase tracking-tighter">Oblique</span>
             <button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
-        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-black">
-            <button onclick="showPage('home')" class="text-left hover:italic">Home</button>
-            <button onclick="showPage('archive')" class="text-left hover:italic">Archive</button>
-            <button onclick="showPage('shop')" class="text-left hover:italic">Shop</button>
-            <button onclick="showPage('about')" class="text-left hover:italic">Manifesto</button>
+        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left">
+            <button onclick="showPage('home')" data-t="navHome">Home</button>
+            <button onclick="showPage('archive')" data-t="navArchive">Archive</button>
+            <button onclick="showPage('shop')" data-t="navShop">Shop</button>
+            <button onclick="showPage('about')" data-t="navAbout">Manifesto</button>
         </div>
     </div>
 
-    <!-- CONTENT -->
     <main id="content" class="pt-20">
-        <!-- PAGE: HOME -->
+        <!-- HOME -->
         <div id="page-home" class="page-fade">
-            <!-- HERO -->
-            <section class="relative min-h-screen flex flex-col lg:flex-row border-b-4 border-white">
+            <section class="relative min-h-screen flex flex-col lg:flex-row border-b-4 border-white text-white">
                 <div class="w-full lg:w-2/5 p-8 md:p-16 flex flex-col justify-between bg-black border-r-4 border-white z-10">
                     <div>
-                        <div class="inline-block bg-white text-black text-[10px] font-black px-4 py-1 mb-12 uppercase tracking-widest">Issue 0.1 / Spring 2026</div>
+                        <div class="inline-block bg-white text-black text-[10px] font-black px-4 py-1 mb-12 uppercase tracking-widest" data-t="issueInfo">Issue 0.1 / Spring 2026</div>
                         <h1 class="text-[18vw] lg:text-[12rem] font-display leading-[0.7] tracking-tighter mb-8 italic">
                             Under<br>ground<br><span class="text-stroke">Almaty</span>
                         </h1>
-                        <p class="max-w-xs text-xs font-bold uppercase opacity-60 leading-relaxed mb-12">
+                        <p class="max-w-xs text-xs font-bold uppercase opacity-60 leading-relaxed mb-12" data-t="heroSub">
                             Первый цифровой архив андеграундной сцены. Мы фиксируем то, что другие боятся заметить.
                         </p>
                     </div>
                     <button onclick="showPage('shop')" class="btn-brutal w-full lg:w-auto">
-                        <span>Shop the Print</span>
+                        <span data-t="shopBtn">Shop the Print</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="ml-4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
                 </div>
@@ -136,311 +123,302 @@
                     <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover img-glitch opacity-80 group-hover:opacity-100">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
                     <div class="absolute bottom-12 left-12 right-12">
-                        <span class="text-[--neon] font-black text-xs uppercase tracking-widest mb-4 block">Editorial Feature</span>
-                        <h2 class="text-6xl md:text-[8rem] font-display uppercase tracking-tighter leading-none group-hover:italic transition-all">The Concrete Colossus</h2>
+                        <span class="text-[--neon] font-black text-xs uppercase tracking-widest mb-4 block" data-t="featuredTag">Editorial Feature</span>
+                        <h2 id="hero-title" class="text-6xl md:text-[8rem] font-display uppercase tracking-tighter leading-none group-hover:italic transition-all">The Concrete Colossus</h2>
                     </div>
                 </div>
             </section>
-
-            <!-- MARQUEE -->
             <div class="marquee-container">
-                <div class="marquee-content text-black font-black">
-                    NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •
-                </div>
+                <div class="marquee-content text-black font-black" data-t="marqueeText">NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •</div>
             </div>
-
-            <!-- FEED -->
-            <section class="p-8 md:p-20 bg-white text-black min-h-screen">
+            <section class="p-8 md:p-20 bg-white text-black min-h-screen text-left">
                 <div class="flex justify-between items-end mb-20 border-b-8 border-black pb-8">
-                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter text-black">Media Feed</h2>
-                    <span class="font-black text-xs uppercase opacity-30 mb-4 hidden md:block">Scroll for raw content / 2026</span>
+                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter" data-t="feedTitle">Media Feed</h2>
+                    <span class="font-black text-xs uppercase opacity-30 mb-4 hidden md:block" data-t="scrollHint">Scroll for raw content / 2026</span>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20">
-                    <div class="group cursor-pointer" onclick="showArticle('demo2')">
-                        <div class="relative overflow-hidden border-4 border-black aspect-[16/10] mb-8">
-                            <img src="https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover img-glitch">
-                            <div class="absolute top-0 right-0 bg-black text-white p-4 font-display text-xl uppercase italic">Culture</div>
-                        </div>
-                        <h3 class="text-5xl font-display uppercase leading-none group-hover:text-[--accent]">Tulpan Berlin: Red Smoke</h3>
-                        <p class="mt-4 text-xs font-bold uppercase opacity-50 max-w-md">Внутри самой закрытой студии города. Когда статусность превращается в пыль.</p>
-                    </div>
-                    <div class="group cursor-pointer mt-12 md:mt-32" onclick="showArticle('demo3')">
-                        <div class="relative overflow-hidden border-4 border-black aspect-[3/4] mb-8">
-                            <img src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover img-glitch">
-                            <div class="absolute top-0 left-0 bg-black text-white p-4 font-display text-xl uppercase italic">Places</div>
-                        </div>
-                        <h3 class="text-5xl font-display uppercase leading-none group-hover:text-[--accent]">Almaty Rails</h3>
-                        <p class="mt-4 text-xs font-bold uppercase opacity-50 max-w-md">Железная дорога как хребет города. Эстетика тупиков и бесконечности.</p>
-                    </div>
-                </div>
+                <div id="home-feed" class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 text-left"></div>
             </section>
         </div>
 
-        <!-- PAGE: ARTICLE (HIDDEN) -->
+        <!-- ARTICLE -->
         <div id="page-article" class="hidden page-fade">
             <section class="min-h-screen bg-black text-white">
                 <div class="flex flex-col lg:flex-row">
                     <div class="w-full lg:w-1/2 h-[80vh] lg:h-screen lg:sticky top-0 border-r-4 border-white">
                         <img id="art-image" src="" class="w-full h-full object-cover grayscale opacity-80">
                     </div>
-                    <div class="w-full lg:w-1/2 p-8 md:p-24 flex flex-col">
+                    <div class="w-full lg:w-1/2 p-8 md:p-24 flex flex-col text-left">
                         <button onclick="showPage('home')" class="flex items-center text-[10px] font-black uppercase mb-20 hover:text-[--neon] transition-colors group">
                             <svg class="mr-4 group-hover:-translate-x-3 transition-transform" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                            Back to Almaty
+                            <span data-t="backBtn">Back to feed</span>
                         </button>
                         <h1 id="art-title" class="text-6xl md:text-[9rem] font-display uppercase leading-[0.8] mb-16 tracking-tighter">Title</h1>
-                        <div id="art-content" class="font-sans text-xl md:text-2xl leading-relaxed opacity-90 space-y-12 text-justify">
-                            Loading...
-                        </div>
-                        <div class="mt-24 border-t-4 border-white pt-12 flex justify-between font-black text-[10px] uppercase opacity-40">
-                            <span>Words: Editorial</span>
-                            <span>Photography: Raw</span>
-                        </div>
+                        <div id="art-content" class="font-sans text-xl md:text-2xl leading-relaxed opacity-90 space-y-12 text-justify"></div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- PAGE: ABOUT (HIDDEN) -->
+        <!-- ABOUT (MANIFESTO) -->
         <div id="page-about" class="hidden page-fade">
-            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative">
-                <h2 class="text-[20vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 pointer-events-none">MANIFESTO</h2>
-                <div class="max-w-5xl z-10">
+            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden">
+                <h2 class="text-[25vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none tracking-tighter">MANIFESTO</h2>
+                <div class="max-w-5xl z-10 text-left">
                     <div class="bg-white text-black p-12 md:p-20 mb-20 border-l-[30px] border-[--accent]">
-                        <p class="text-4xl md:text-6xl font-display uppercase italic leading-[0.9]">
-                            «Мы не делаем контент. Мы фиксируем историю, которую вы привыкли игнорировать.»
-                        </p>
+                        <p class="text-4xl md:text-6xl font-display uppercase italic leading-[0.9]" data-t="manifestoQuote">«Мы не делаем контент. Мы фиксируем историю, которую вы привыкли игнорировать.»</p>
                     </div>
-                    <p class="text-3xl md:text-5xl font-sans font-black uppercase tracking-tight leading-none mb-12">
-                        OBLIQUE — это результат дипломного исследования и начало большого архива.
-                    </p>
-                    <div class="space-y-8 text-xl opacity-80 leading-relaxed max-w-3xl uppercase font-bold text-justify">
-                        <p>Наша родина многослойна. Мы приоткрываем пласт андеграунда Алматы, чтобы показать вам то, что остается за блеском ТРЦ и шумом магистралей. Это исследование городской ДНК через звук, бетон и людей, которые его шатают.</p>
-                        <p>OBLIQUE — это платформа для тех, кто ищет смыслы там, где остальные видят только пустоту. Мы верим в эстетику индустриального монстра и искренность подвальных рейвов.</p>
+                    <div class="space-y-12">
+                        <p class="text-3xl md:text-5xl font-sans font-black uppercase tracking-tight leading-none text-[--neon]" data-t="manifestoTitle">OBLIQUE — это цифровой архив и дипломное исследование.</p>
+                        <div id="manifesto-text-container" class="space-y-8 text-xl md:text-2xl opacity-80 leading-relaxed max-w-3xl uppercase font-bold text-justify"></div>
                     </div>
-                    
-                    <div class="mt-20 space-y-6">
-                        <h4 class="text-[--neon] font-black uppercase tracking-[0.3em]">Contacts</h4>
-                        <a href="mailto:oblique.mag@gmail.com" class="text-3xl md:text-5xl font-display hover:text-[--accent] block">oblique.mag@gmail.com</a>
-                        <a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank" class="text-3xl md:text-5xl font-display hover:text-[--neon] block">@obliquejournal</a>
+                    <div class="mt-32 space-y-8">
+                        <h4 class="text-[--neon] font-black uppercase tracking-[0.4em] text-xs" data-t="commTitle">Communication</h4>
+                        <a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter">oblique.mag@gmail.com</a>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-32 border-t-4 border-white pt-16">
-                        <div>
-                            <span class="text-[--neon] font-black text-[10px] uppercase block mb-4">Editor in Chief</span>
-                            <span class="text-3xl font-display uppercase">Эльвира Иванникова</span>
-                        </div>
-                        <div>
-                            <span class="text-[--neon] font-black text-[10px] uppercase block mb-4">Creative Direction</span>
-                            <span class="text-3xl font-display uppercase">Ева Головинцева</span>
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16">
+                        <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="editorLabel">Editor in Chief</span><span class="text-4xl font-display uppercase">Эльвира Иванникова</span></div>
+                        <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="creativeLabel">Creative Direction</span><span class="text-4xl font-display uppercase">Ева Головинцева</span></div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- PAGE: SHOP (HIDDEN) -->
+        <!-- SHOP -->
         <div id="page-shop" class="hidden page-fade">
-            <section class="p-8 md:p-24 bg-white text-black min-h-screen">
-                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8 text-black">Stockroom</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="shop-grid">
-                    <!-- Dynamic Items -->
-                </div>
+            <section class="p-8 md:p-24 bg-white text-black min-h-screen text-left">
+                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navShop">Stockroom</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="shop-grid"></div>
             </section>
         </div>
 
-        <!-- PAGE: CART / CHECKOUT (HIDDEN) -->
+        <!-- CART -->
         <div id="page-cart" class="hidden page-fade">
-            <section class="p-8 md:p-24 bg-black text-white min-h-screen">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-7xl font-display uppercase mb-12 italic tracking-tighter">Your Order</h2>
-                    <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10">
-                        <!-- List of items -->
-                    </div>
-
+            <section class="p-8 md:p-24 bg-black text-white min-h-screen flex flex-col justify-center">
+                <div class="max-w-4xl mx-auto w-full text-left">
+                    <h2 class="text-7xl md:text-9xl font-display uppercase mb-16 italic tracking-tighter" data-t="cartTitle">Your Order</h2>
+                    <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10"></div>
                     <div id="checkout-form-container">
-                        <h3 class="text-4xl font-display uppercase mb-8 text-[--neon]">Shipping Info</h3>
-                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-2">
-                            <input type="text" id="cust-name" placeholder="FULL NAME" required>
+                        <h3 class="text-4xl font-display uppercase mb-10 text-[--neon]" data-t="shippingTitle">Shipping Info</h3>
+                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4">
+                            <input type="text" id="cust-name" placeholder="ФИО / FULL NAME" required>
                             <input type="email" id="cust-email" placeholder="EMAIL" required>
-                            <input type="tel" id="cust-phone" placeholder="PHONE NUMBER (e.g. +7...)" required>
-                            <button type="submit" class="btn-brutal w-full mt-8">
-                                <span>Place Order</span>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            </button>
+                            <input type="tel" id="cust-phone" placeholder="+7 (___) ___ __ __" required>
+                            <button type="submit" class="btn-brutal w-full mt-10"><span data-t="placeOrder">Place Order</span></button>
                         </form>
                     </div>
-                    <div id="checkout-success" class="hidden text-center py-20">
-                        <h3 class="text-6xl font-display uppercase text-[--neon] mb-6">Success</h3>
-                        <p class="text-xl font-bold uppercase opacity-60">We will contact you shortly for payment and delivery details.</p>
-                        <button onclick="showPage('home')" class="mt-12 text-white font-black uppercase underline tracking-widest">Back to main</button>
+                    <div id="checkout-success" class="hidden text-center py-20 border-4 border-[--neon] p-10">
+                        <h3 class="text-7xl font-display uppercase text-[--neon] mb-6" data-t="successTitle">Success</h3>
+                        <p class="text-xl font-bold uppercase opacity-60" data-t="successMsg"></p>
+                        <button onclick="showPage('home')" class="mt-12 text-white font-black uppercase underline tracking-widest" data-t="backBtn">Back to main</button>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- PAGE: ARCHIVE (HIDDEN) -->
+        <!-- ARCHIVE -->
         <div id="page-archive" class="hidden page-fade">
-            <section class="p-8 md:p-24 bg-white text-black min-h-screen">
-                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8 text-black">Archives</h2>
-                <div class="space-y-2" id="archive-list">
-                    <!-- Dynamic Articles -->
-                </div>
+            <section class="p-8 md:p-24 bg-white text-black min-h-screen text-left">
+                <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navArchive">Archives</h2>
+                <div class="space-y-2" id="archive-list"></div>
             </section>
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="p-12 md:p-24 border-t-4 border-white bg-black text-white">
-        <h3 class="text-[20vw] font-display leading-[0.6] mb-20 hover:text-stroke cursor-pointer transition-all" onclick="showPage('home')">Oblique</h3>
+    <footer class="p-12 md:p-24 border-t-4 border-white bg-black text-white text-left">
+        <h3 class="text-[22vw] font-display leading-[0.6] mb-20 hover:text-stroke cursor-pointer transition-all tracking-tighter" onclick="showPage('home')">Oblique</h3>
         <div class="flex flex-col md:flex-row justify-between items-end gap-16 font-black text-[12px] uppercase tracking-[0.4em] opacity-40 border-t-4 border-white pt-20">
-            <p>© 2026 OBLIQUE JOURNAL. ALMATY CITY. ALL RIGHTS RESERVED.</p>
+            <div class="flex flex-col gap-2">
+                <p>© 2026 OBLIQUE JOURNAL. ALMATY CITY. ALL RIGHTS RESERVED.</p>
+                <div class="flex space-x-6 text-[--neon]">
+                    <a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank" class="hover:underline">Instagram (Platforms)</a>
+                    <a href="mailto:oblique.mag@gmail.com" class="hover:underline">Email</a>
+                </div>
+            </div>
             <div class="flex space-x-12">
-                <a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank" class="hover:text-[--neon]">Instagram</a>
-                <a href="mailto:oblique.mag@gmail.com" class="hover:text-[--neon]">oblique.mag@gmail.com</a>
+                <span>RAW ARCHIVE</span>
+                <span>NOISE MEDIA</span>
             </div>
         </div>
     </footer>
 
     <script>
+        const translations = {
+            ru: {
+                navHome: "Главная", navArchive: "Архив", navShop: "Магазин", navAbout: "Манифест",
+                issueInfo: "Выпуск 0.1 / Весна 2026",
+                heroSub: "Первый цифровой архив андеграундной сцены. Мы фиксируем то, что другие боятся заметить.",
+                shopBtn: "Купить принт", featuredTag: "Главный материал", feedTitle: "Лента", scrollHint: "Листайте для контента / 2026",
+                backBtn: "Назад к ленте", commTitle: "Связь", editorLabel: "Главный редактор", creativeLabel: "Дизайн / Шеф-ред",
+                manifestoQuote: "«Мы не делаем контент. Мы фиксируем историю, которую вы привыкли игнорировать.»",
+                manifestoTitle: "OBLIQUE — это цифровой архив и дипломное исследование.",
+                manifestoText: "<p>Наша родина многослойна. Мы приоткрываем пласт андеграунда Алматы, чтобы показать вам то, что остается за блеском ТРЦ и шумом магистралей. Это исследование городской ДНК через звук, бетон и людей, которые его шатают.</p><p>OBLIQUE — это платформа для тех, кто ищет смыслы там, где остальные видят только пустоту. Мы верим в эстетику индустриального монстра и искренность подвальных рейвов.</p>",
+                cartTitle: "Ваш заказ", shippingTitle: "Доставка", placeOrder: "Оформить заказ", successTitle: "Готово",
+                successMsg: "Мы свяжемся с вами в ближайшее время для уточнения деталей оплаты и доставки.",
+                marqueeText: "NOISE • ТЕХНО • РЕВОЛЮЦИЯ • АЛМАТЫ АНДЕГРАУНД • NOISE • ТЕХНО • РЕВОЛЮЦИЯ • АЛМАТЫ АНДЕГРАУНД •",
+                addBtn: "Добавить", emptyCart: "Корзина пуста", remove: "Удалить", total: "Итого"
+            },
+            en: {
+                navHome: "Home", navArchive: "Archive", navShop: "Stockroom", navAbout: "Manifesto",
+                issueInfo: "Issue 0.1 / Spring 2026",
+                heroSub: "The first digital archive of the underground scene. We capture what others are afraid to notice.",
+                shopBtn: "Shop the Print", featuredTag: "Editorial Feature", feedTitle: "Media Feed", scrollHint: "Scroll for raw content / 2026",
+                backBtn: "Back to feed", commTitle: "Communication", editorLabel: "Editor in Chief", creativeLabel: "Creative Direction",
+                manifestoQuote: "«We don't make content. We record the history you're used to ignoring.»",
+                manifestoTitle: "OBLIQUE is a digital archive and a graduation research.",
+                manifestoText: "<p>Our homeland is multi-layered. We uncover the layer of Almaty's underground to show you what remains behind the gloss of shopping malls and the noise of highways.</p><p>OBLIQUE is a platform for those who look for meaning where others see only emptiness. We believe in the aesthetics of the industrial monster and the sincerity of basement raves.</p>",
+                cartTitle: "Your Order", shippingTitle: "Shipping Info", placeOrder: "Place Order", successTitle: "Success",
+                successMsg: "We will contact you shortly for payment and delivery details.",
+                marqueeText: "NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •",
+                addBtn: "Add", emptyCart: "Cart is empty", remove: "Remove", total: "Total"
+            }
+        };
+
         const articles = {
-            'demo1': { title: 'Concrete Colossus', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600', cat: 'Editorial', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния, выталкивает из себя старые смыслы. Алматы сегодня — это не просто фасады зданий и сетка улиц. Это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей. Мы исследовали каждый этаж этого индустриального монстра.' },
-            'demo2': { title: 'Tulpan Berlin', image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200', cat: 'Culture', content: 'Днем — стерильный бокс для съемок Bazaar. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом. Здесь создается новая визуальная культура Казахстана.' },
-            'demo3': { title: 'Almaty Rails', image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200', cat: 'Places', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' }
+            'demo1': { 
+                ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Алматы сегодня — это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей.' },
+                en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. Almaty today is a complex ecosystem read through the underground.\n\nColossus is a place of power, a former printing house where concrete speaks louder than people.' },
+                image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600'
+            },
+            'demo2': { 
+                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Днем — стерильный бокс для съемок. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом.' },
+                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'By day — a sterile box for shoots. By night — the vibrating reservoir of VIKHOD. Gloss meets red smoke.' },
+                image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200'
+            },
+            'demo3': { 
+                ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' },
+                en: { title: 'Almaty Rails', cat: 'Places', content: 'The railroad as a border between the past and future of the southern capital. Aesthetics of dead ends.' },
+                image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200'
+            }
         };
 
         const products = [
-            { id: 'p1', name: "Oblique #0.1", price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT" },
-            { id: 'p2', name: "Hoodie 'BETON'", price: 18000, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", cat: "APPAREL" },
-            { id: 'p3', name: "Tote 'OBLIQUE'", price: 8000, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800", cat: "ACCESSORIES" }
+            { id: 'p1', ru: {name: "Oblique Выпуск #0.1"}, en: {name: "Oblique Issue #0.1"}, price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT" },
+            { id: 'p2', ru: {name: "Худи 'БЕТОН'"}, en: {name: "Hoodie 'BETON'"}, price: 18000, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", cat: "APPAREL" },
+            { id: 'p3', ru: {name: "Шоппер 'OBLIQUE'"}, en: {name: "Tote Bag 'OBLIQUE'"}, price: 8000, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800", cat: "ACCESSORIES" }
         ];
 
+        let currentLang = 'ru';
         let cart = [];
 
-        function init() {
-            renderArchive();
-            renderShop();
-            updateCartCount();
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if (translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+            const textCont = document.getElementById('manifesto-text-container');
+            if (textCont) textCont.innerHTML = translations[lang].manifestoText;
+            document.getElementById('lang-ru').classList.toggle('lang-active', lang === 'ru');
+            document.getElementById('lang-en').classList.toggle('lang-active', lang === 'en');
+            renderFeed(); renderArchive(); renderShop(); updateHero();
         }
+
+        function updateHero() { document.getElementById('hero-title').innerText = articles['demo1'][currentLang].title; }
 
         function showPage(id) {
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
-            document.getElementById('page-' + id).classList.remove('hidden');
-            if(id === 'cart') renderCart();
+            const target = document.getElementById('page-' + id);
+            if (target) target.classList.remove('hidden');
+            if (id === 'cart') renderCart();
+            if (id === 'mobile-menu') toggleMenu();
             window.scrollTo(0, 0);
         }
 
         function showArticle(id) {
-            const art = articles[id];
-            document.getElementById('art-title').innerText = art.title;
-            document.getElementById('art-image').src = art.image;
-            document.getElementById('art-content').innerText = art.content;
+            const content = articles[id][currentLang];
+            document.getElementById('art-title').innerText = content.title;
+            document.getElementById('art-image').src = articles[id].image;
+            document.getElementById('art-content').innerText = content.content;
             showPage('article');
         }
 
-        function toggleMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+
+        function renderFeed() {
+            const feed = document.getElementById('home-feed'); if (!feed) return;
+            feed.innerHTML = Object.entries(articles).slice(1).map(([id, art]) => `
+                <div class="group cursor-pointer" onclick="showArticle('${id}')">
+                    <div class="relative overflow-hidden border-4 border-black aspect-[16/10] mb-8">
+                        <img src="${art.image}" class="w-full h-full object-cover img-glitch">
+                        <div class="absolute top-0 right-0 bg-black text-white p-4 font-display text-xl italic">${art[currentLang].cat}</div>
+                    </div>
+                    <h3 class="text-5xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors">${art[currentLang].title}</h3>
+                </div>
+            `).join('');
         }
 
         function renderArchive() {
-            const list = document.getElementById('archive-list');
+            const list = document.getElementById('archive-list'); if (!list) return;
             list.innerHTML = Object.entries(articles).map(([id, art]) => `
-                <div onclick="showArticle('${id}')" class="group border-b-4 border-black/10 py-10 flex items-center justify-between cursor-pointer hover:bg-black hover:text-white px-6 transition-all duration-300">
+                <div onclick="showArticle('${id}')" class="group border-b-4 border-black/10 py-10 flex items-center justify-between cursor-pointer hover:bg-black hover:text-white px-6 transition-all">
                     <div class="flex items-center space-x-8">
-                        <span class="font-display text-4xl md:text-7xl uppercase tracking-tighter">${art.title}</span>
-                        <span class="hidden md:block bg-black text-white group-hover:bg-white group-hover:text-black px-3 py-1 font-black text-[10px] uppercase">${art.cat}</span>
+                        <span class="font-display text-4xl md:text-7xl uppercase tracking-tighter">${art[currentLang].title}</span>
+                        <span class="hidden md:block bg-black text-white px-3 py-1 font-black text-[10px] uppercase">${art[currentLang].cat}</span>
                     </div>
-                    <svg class="opacity-20 group-hover:opacity-100 group-hover:translate-x-4 transition-all" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </div>
             `).join('');
         }
 
         function renderShop() {
-            const grid = document.getElementById('shop-grid');
+            const grid = document.getElementById('shop-grid'); if (!grid) return;
             grid.innerHTML = products.map(p => `
                 <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all flex flex-col justify-between">
                     <div>
-                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden relative">
+                        <div class="aspect-square border-4 border-black mb-8 overflow-hidden relative">
                             <img src="${p.img}" class="w-full h-full object-cover mix-blend-multiply grayscale group-hover:grayscale-0 transition-all">
                             <div class="absolute top-0 left-0 bg-black text-white p-2 font-black text-[9px] uppercase tracking-widest">${p.cat}</div>
                         </div>
-                        <h3 class="text-4xl font-display uppercase tracking-tighter">${p.name}</h3>
+                        <h3 class="text-4xl font-display uppercase tracking-tighter text-black">${p[currentLang].name}</h3>
                     </div>
-                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black">
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black text-black">
                         <span class="text-2xl font-black">${p.price} ₸</span>
-                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-4 px-8 border-2 border-black">Add</button>
+                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-4 px-8 border-2 border-black">${translations[currentLang].addBtn}</button>
                     </div>
                 </div>
             `).join('');
         }
 
         function addToCart(id) {
-            const prod = products.find(p => p.id === id);
-            cart.push(prod);
-            updateCartCount();
-            // Subtle feedback
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = 'Added';
-            setTimeout(() => btn.innerText = originalText, 1000);
-        }
-
-        function updateCartCount() {
+            cart.push(products.find(p => p.id === id));
             document.getElementById('cart-count').innerText = cart.length;
+            const btn = event.target; const orig = btn.innerText; btn.innerText = '✓';
+            setTimeout(() => btn.innerText = orig, 1000);
         }
 
         function renderCart() {
-            const list = document.getElementById('cart-items-list');
-            const form = document.getElementById('checkout-form-container');
-            const success = document.getElementById('checkout-success');
-            
-            form.classList.remove('hidden');
-            success.classList.add('hidden');
-
+            const list = document.getElementById('cart-items-list'); if (!list) return;
+            document.getElementById('checkout-form-container').classList.remove('hidden');
+            document.getElementById('checkout-success').classList.add('hidden');
             if (cart.length === 0) {
-                list.innerHTML = '<p class="text-2xl font-black opacity-30 uppercase italic">Your cart is empty.</p>';
+                list.innerHTML = `<p class="text-2xl font-black opacity-30 uppercase italic">${translations[currentLang].emptyCart}</p>`;
                 document.getElementById('checkout-form').classList.add('hidden');
             } else {
                 document.getElementById('checkout-form').classList.remove('hidden');
                 let total = 0;
                 list.innerHTML = cart.map((p, index) => {
                     total += p.price;
-                    return `
-                        <div class="flex justify-between items-center border-b border-white/20 pb-4">
-                            <div>
-                                <h4 class="text-3xl font-display uppercase tracking-tighter">${p.name}</h4>
-                                <span class="text-[--neon] font-black">${p.price} ₸</span>
-                            </div>
-                            <button onclick="removeFromCart(${index})" class="text-[--accent] font-black uppercase text-[10px] underline">Remove</button>
-                        </div>
-                    `;
-                }).join('') + `
-                    <div class="flex justify-between items-end pt-10">
-                        <span class="font-display text-4xl uppercase opacity-40 italic">Total</span>
-                        <span class="text-6xl font-display text-[--neon]">${total} ₸</span>
-                    </div>
-                `;
+                    return `<div class="flex justify-between items-center border-b border-white/20 pb-4">
+                        <div><h4 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h4><span class="text-[--neon] font-black">${p.price} ₸</span></div>
+                        <button onclick="removeFromCart(${index})" class="text-[--accent] font-black uppercase text-[10px] underline">${translations[currentLang].remove}</button>
+                    </div>`;
+                }).join('') + `<div class="flex justify-between items-end pt-10"><span class="font-display text-4xl uppercase opacity-40 italic">${translations[currentLang].total}</span><span class="text-6xl font-display text-[--neon]">${total} ₸</span></div>`;
             }
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartCount();
-            renderCart();
-        }
+        function removeFromCart(index) { cart.splice(index, 1); document.getElementById('cart-count').innerText = cart.length; renderCart(); }
 
         function handleCheckout(e) {
             e.preventDefault();
-            // In a real app, send data to backend. Here we simulate success.
             document.getElementById('checkout-form-container').classList.add('hidden');
             document.getElementById('cart-items-list').innerHTML = '';
             document.getElementById('checkout-success').classList.remove('hidden');
-            cart = [];
-            updateCartCount();
+            document.getElementById('checkout-success').querySelector('p').innerText = translations[currentLang].successMsg;
+            cart = []; document.getElementById('cart-count').innerText = '0';
         }
 
-        window.onload = init;
+        window.onload = () => setLanguage('ru');
     </script>
 </body>
 </html>
