@@ -125,8 +125,8 @@
             };
 
             const Navigation = () => (
-                <nav className={`fixed top-0 w-full z-40 transition-all duration-300 border-b border-black ${scrolled ? 'bg-white py-3' : 'bg-white/80 backdrop-blur-sm py-4 md:py-6'}`}>
-                    <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                <nav className={`fixed top-0 w-full z-40 transition-all duration-300 border-b border-black ${scrolled ? 'bg-white py-3' : 'bg-white/90 backdrop-blur-md py-4 md:py-6'}`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                         <div className="flex items-center space-x-8">
                             <button onClick={() => setCurrentPage('home')} className="text-2xl font-black tracking-tighter uppercase hover:text-[#FF00FF] transition-colors">Oblique</button>
                             <div className="hidden md:flex space-x-6 text-[10px] font-mono uppercase tracking-widest">
@@ -158,33 +158,36 @@
 
             const Home = () => (
                 <div className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <section className="mb-16 md:mb-20 mt-4">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border border-black">
-                            <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-black p-6 md:p-12 flex flex-col justify-between min-h-[400px] lg:min-h-[600px]">
+                    <section className="mb-16 md:mb-24 mt-4 lg:mt-8">
+                        {/* Измененная сетка для больших экранов: строгие 50/50 и заполнение высоты */}
+                        <div className="flex flex-col lg:flex-row border border-black lg:min-h-[75vh]">
+                            <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-black p-6 md:p-12 lg:p-16 flex flex-col justify-between order-2 lg:order-1">
                                 <div>
-                                    <span className="text-[10px] font-mono mb-4 block underline">#0.1 SPRING ISSUE</span>
-                                    <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-black leading-[0.85] tracking-tighter uppercase mb-8">
+                                    <span className="text-[10px] font-mono mb-6 block underline">#0.1 SPRING ISSUE</span>
+                                    {/* Адаптивная типографика для заголовка */}
+                                    <h1 className="text-6xl sm:text-7xl lg:text-[6rem] xl:text-[8rem] font-black leading-[0.85] tracking-tighter uppercase mb-8 break-words">
                                         Under<br/>ground<br/><span className="text-[#FF00FF]">Almaty</span>
                                     </h1>
                                 </div>
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mt-8">
+                                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-6 mt-12">
                                     <p className="max-w-xs text-xs md:text-sm leading-tight uppercase font-bold opacity-80">
                                         Первый журнал андеграунд культуры Казахстана. Кухня, бары, тусовки, люди.
                                     </p>
                                     <button 
                                         onClick={() => setCurrentPage('shop')}
-                                        className="bg-black text-white w-full sm:w-auto px-8 py-4 hover:bg-[#FF00FF] transition-colors flex items-center justify-center group font-bold text-xs"
+                                        className="bg-black text-white w-full xl:w-auto px-8 py-4 hover:bg-[#FF00FF] transition-colors flex items-center justify-center group font-bold text-xs shrink-0"
                                     >
                                         КУПИТЬ ВЫПУСК <Icon name="ArrowRight" size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                                     </button>
                                 </div>
                             </div>
-                            <div className="lg:col-span-4 relative overflow-hidden group aspect-square lg:aspect-auto lg:h-[600px]">
+                            <div className="w-full lg:w-1/2 relative overflow-hidden group h-[50vh] lg:h-auto order-1 lg:order-2">
                                 <img 
                                     src={articles[0].image} 
                                     alt="Oblique Cover" 
-                                    className="w-full h-full object-cover img-reveal group-hover:scale-105"
+                                    className="w-full h-full object-cover img-reveal group-hover:scale-105 absolute inset-0"
                                 />
+                                <div className="absolute inset-0 bg-[#FF00FF] mix-blend-multiply opacity-20 group-hover:opacity-0 transition-opacity"></div>
                             </div>
                         </div>
                     </section>
@@ -198,18 +201,19 @@
                             <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">Медиа платформа</h2>
                             <button onClick={() => setCurrentPage('articles')} className="text-[10px] font-mono uppercase underline underline-offset-4 hover:text-[#FF00FF] transition-colors">Смотреть все</button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        {/* Измененная сетка статей: 3 колонки на десктопе */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                             {articles.map((art) => (
-                                <div key={art.id} className="border border-black group cursor-pointer flex flex-col" onClick={() => openArticle(art.id)}>
+                                <div key={art.id} className="border border-black group cursor-pointer flex flex-col hover:shadow-xl transition-shadow" onClick={() => openArticle(art.id)}>
                                     <div className="relative overflow-hidden aspect-[4/5] border-b border-black">
                                         <img src={art.image} alt={art.title} className="w-full h-full object-cover img-reveal group-hover:scale-105" />
                                         <div className="absolute top-4 left-4 bg-black text-white text-[8px] px-2 py-1 font-mono uppercase">{art.category}</div>
                                     </div>
-                                    <div className="p-5 bg-white group-hover:bg-black group-hover:text-white transition-colors flex-grow flex flex-col">
+                                    <div className="p-5 md:p-6 bg-white group-hover:bg-black group-hover:text-white transition-colors flex-grow flex flex-col">
                                         <div className="flex space-x-2 mb-3">
                                             {art.tags.map(t => <span key={t} className="text-[8px] font-mono opacity-60">#{t}</span>)}
                                         </div>
-                                        <h3 className="text-xl md:text-2xl font-black uppercase leading-none mb-3 tracking-tight">{art.title}</h3>
+                                        <h3 className="text-xl md:text-2xl font-black uppercase leading-tight mb-3 tracking-tight">{art.title}</h3>
                                         <p className="text-[10px] md:text-xs opacity-70 mb-6 uppercase font-medium line-clamp-2">{art.description}</p>
                                         <div className="mt-auto flex items-center text-[9px] font-black uppercase tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">
                                             Читать полностью <Icon name="ArrowRight" size={12} className="ml-1" />
@@ -221,7 +225,7 @@
                     </section>
 
                     <section className="bg-black text-white py-24 md:py-32 px-6 mb-20">
-                        <div className="text-center">
+                        <div className="text-center max-w-4xl mx-auto">
                             <h2 className="text-4xl md:text-6xl lg:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.85]">
                                 КТО ШАТАЕТ<br/>ЭТОТ БЕТОН?
                             </h2>
@@ -248,7 +252,8 @@
                         <button onClick={() => setCurrentPage('home')} className="flex items-center text-[10px] font-mono uppercase hover:text-[#FF00FF] transition-colors mb-8">
                             <Icon name="ArrowLeft" size={16} className="mr-2" /> Назад в город
                         </button>
-                        <div className="relative overflow-hidden aspect-video border border-black mb-8 group">
+                        {/* Измененные пропорции изображения для десктопа */}
+                        <div className="relative overflow-hidden aspect-video lg:aspect-[21/9] border border-black mb-8 group">
                             <img src={article.image} alt={article.title} className="w-full h-full object-cover img-reveal" />
                         </div>
                         <div className="flex items-center gap-4 mb-6">
@@ -268,13 +273,13 @@
             };
 
             const ArticlesArchive = () => (
-                <div className="pt-28 md:pt-32 max-w-7xl mx-auto px-4 min-h-screen pb-20">
+                <div className="pt-28 md:pt-32 max-w-5xl mx-auto px-4 min-h-screen pb-20">
                     <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-12 border-b-4 border-black pb-4">Архив материалов</h2>
                     <div className="space-y-0">
                         {articles.concat(articles).map((art, i) => (
                             <div key={i} className="group border-b border-black py-8 md:py-12 flex flex-col md:flex-row gap-6 md:gap-8 items-center cursor-pointer hover:bg-neutral-50 px-2 md:px-4 transition-colors" onClick={() => openArticle(art.id)}>
                                 <div className="text-[10px] font-mono opacity-30 hidden md:block">0{i+1}</div>
-                                <div className="w-full md:w-1/4 aspect-[4/3] overflow-hidden border border-black">
+                                <div className="w-full md:w-1/3 lg:w-1/4 aspect-[4/3] overflow-hidden border border-black shrink-0">
                                     <img src={art.image} className="w-full h-full object-cover img-reveal group-hover:scale-105" />
                                 </div>
                                 <div className="flex-1 w-full text-left">
@@ -290,24 +295,25 @@
             );
 
             const Shop = () => (
-                <div className="pt-28 md:pt-32 max-w-7xl mx-auto px-4 min-h-screen pb-20">
+                <div className="pt-28 md:pt-32 max-w-5xl mx-auto px-4 min-h-screen pb-20">
                     <div className="flex justify-between items-baseline mb-10 md:mb-12 border-b-2 border-black pb-4">
                         <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Магазин</h2>
                         <span className="font-mono text-[10px] opacity-50 uppercase">{shopItems.length} позиции доступно</span>
                     </div>
+                    {/* Ограничение ширины сетки магазина на десктопе */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-black border border-black">
                         {shopItems.map((item) => (
-                            <div key={item.id} className="bg-white p-6 md:p-10 group">
+                            <div key={item.id} className="bg-white p-6 md:p-10 group flex flex-col">
                                 <div className="aspect-[3/4] bg-neutral-100 mb-8 relative overflow-hidden flex items-center justify-center border border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover mix-blend-multiply img-reveal group-hover:scale-105" />
                                    <div className="absolute top-4 left-4 bg-black text-white font-mono text-[8px] px-2 py-1 uppercase">{item.type}</div>
                                 </div>
-                                <div className="flex justify-between items-start">
+                                <div className="flex justify-between items-start mt-auto">
                                     <div>
                                         <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight mb-2">{item.title}</h3>
                                         <p className="text-lg md:text-xl font-mono text-[#FF00FF]">{item.price}</p>
                                     </div>
-                                    <button onClick={() => setCartCount(c => c + 1)} className="bg-black text-white w-10 h-10 md:w-12 md:h-12 flex items-center justify-center hover:bg-[#FF00FF] transition-colors">
+                                    <button onClick={() => setCartCount(c => c + 1)} className="bg-black text-white w-10 h-10 md:w-12 md:h-12 flex items-center justify-center hover:bg-[#FF00FF] transition-colors shrink-0">
                                         <span className="text-2xl font-bold">+</span>
                                     </button>
                                 </div>
@@ -319,7 +325,7 @@
 
             const Footer = () => (
                 <footer className="bg-white border-t border-black pt-16 md:pt-20 pb-10 mt-10">
-                    <div className="max-w-7xl mx-auto px-4">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 md:mb-20">
                             <div className="col-span-1 md:col-span-2">
                                 <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter mb-6">Oblique</h3>
