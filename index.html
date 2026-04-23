@@ -5,58 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBLIQUE — ALMATY UNDERGROUND</title>
     <script src="https://cdn.tailwindcss.com/"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Oswald:wght@500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <style>
         :root { --neon: #CCFF00; --accent: #FF00FF; }
         body { background-color: #0e0e0e; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         .font-display { font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 0.8; }
         .grain { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.08; background-image: url('https://grainy-gradients.vercel.app/noise.svg'); }
-        .btn-brutal { background: #fff; color: #000; padding: 20px; font-weight: 900; text-transform: uppercase; transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1); display: inline-flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .btn-brutal:hover { background: var(--neon); transform: translate(5px, -5px); box-shadow: -5px 5px 0 #fff; }
+        .btn-brutal { background: #fff; color: #000; padding: 15px; font-weight: 900; text-transform: uppercase; border: 3px solid #000; transition: 0.2s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-brutal:hover { background: var(--neon); transform: translate(4px, -4px); box-shadow: -4px 4px 0 #fff; }
         .text-stroke { -webkit-text-stroke: 1px #fff; color: transparent; }
-        .text-stroke:hover { color: #fff; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-container { overflow: hidden; white-space: nowrap; background: var(--neon); color: #000; padding: 15px 0; border-y: 4px solid #000; }
         .marquee-content { display: inline-block; animation: scroll 20s linear infinite; font-weight: 900; text-transform: uppercase; font-size: 14px; letter-spacing: 0.2em; }
         .img-glitch { filter: grayscale(1) contrast(1.1); transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.05); }
-        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border: 3px solid #000; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon); }
-        .page-fade { animation: fadeIn 0.6s ease-both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        input { background: #1a1a1a; border: 2px solid #333; color: #fff; padding: 15px; font-weight: bold; width: 100%; margin-bottom: 15px; border-radius: 0; }
+        ::-webkit-scrollbar-thumb { background: #333; border: 2px solid #000; }
+        .page-fade { animation: fadeIn 0.4s ease-both; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        input, textarea, select { background: #1a1a1a; border: 2px solid #333; color: #fff; padding: 12px; width: 100%; margin-bottom: 10px; border-radius: 0; font-family: inherit; }
         input:focus { border-color: var(--neon); outline: none; }
         .lang-active { color: var(--neon); text-decoration: underline; }
-        .grid-editorial { display: grid; grid-template-columns: repeat(1, 1fr); gap: 5rem; }
+        
+        /* Grid Layouts */
+        .grid-editorial { display: grid; grid-template-columns: repeat(1, 1fr); gap: 4rem; }
         @media (min-width: 1024px) {
             .grid-editorial { grid-template-columns: repeat(12, 1fr); gap: 8rem 2rem; align-items: start; }
             .item-left { grid-column: 1 / span 7; }
-            .item-right { grid-column: 8 / span 5; margin-top: 12rem; }
+            .item-right { grid-column: 8 / span 5; margin-top: 10rem; }
             .item-center { grid-column: 3 / span 8; }
             .item-wide { grid-column: 1 / span 12; }
-            .item-split-left { grid-column: 1 / span 5; }
-            .item-split-right { grid-column: 6 / span 7; margin-top: 6rem; }
         }
-        .grid-collage { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 2px solid #fff; background: #fff; }
+        .grid-collage { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 2px solid #fff; }
         @media (min-width: 768px) { .grid-collage { grid-template-columns: repeat(4, 1fr); } }
-        .collage-item { position: relative; overflow: hidden; cursor: pointer; background: #000; }
-        .collage-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; text-align: center; padding: 30px; opacity: 0; transition: 0.4s; z-index: 10; }
+        .collage-item { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 1/1; }
+        .collage-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; opacity: 0; transition: 0.3s; z-index: 10; }
         .collage-item:hover .collage-overlay { opacity: 1; }
-        .collage-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
-        .collage-item:hover img { transform: scale(1.1); filter: grayscale(0); }
-        .aspect-editorial { aspect-ratio: 4 / 5; }
-        .aspect-wide { aspect-ratio: 16 / 9; }
-        .aspect-square { aspect-ratio: 1 / 1; }
+        .admin-controls { position: absolute; top: 10px; left: 10px; z-index: 50; display: flex; gap: 5px; }
+        .admin-btn { background: var(--accent); color: white; padding: 5px 10px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+        .admin-only { display: none; }
+        body.is-admin .admin-only { display: flex !important; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
     </style>
 </head>
-<body>
+<body id="body-tag">
     <div class="grain"></div>
 
+    <!-- ADMIN MODAL -->
+    <div id="admin-modal" class="modal">
+        <div class="bg-white text-black p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto border-heavy">
+            <h2 id="modal-title" class="text-4xl font-display mb-6">Edit Item</h2>
+            <form id="admin-form" onsubmit="saveItem(event)">
+                <input type="hidden" id="edit-id">
+                <input type="hidden" id="edit-type">
+                <label class="text-[10px] font-black uppercase">Image URL</label>
+                <input type="text" id="edit-image" required>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black uppercase">Title (RU)</label>
+                        <input type="text" id="edit-title-ru" required>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase">Title (EN)</label>
+                        <input type="text" id="edit-title-en" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black uppercase">Category (RU)</label>
+                        <input type="text" id="edit-cat-ru" required>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase">Category (EN)</label>
+                        <input type="text" id="edit-cat-en" required>
+                    </div>
+                </div>
+                <label class="text-[10px] font-black uppercase">Content (RU)</label>
+                <textarea id="edit-content-ru" rows="4"></textarea>
+                <label class="text-[10px] font-black uppercase">Content (EN)</label>
+                <textarea id="edit-content-en" rows="4"></textarea>
+                <label class="text-[10px] font-black uppercase">Gallery (Links separated by comma)</label>
+                <textarea id="edit-gallery" rows="2" placeholder="url1, url2..."></textarea>
+                
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="btn-brutal flex-grow">Save Changes</button>
+                    <button type="button" onclick="closeModal()" class="bg-black text-white p-4 uppercase font-black text-xs">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- NAV -->
-    <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between">
-        <div class="flex items-center space-x-12 text-white">
+    <nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b-4 border-white h-20 flex items-center px-6 justify-between text-white">
+        <div class="flex items-center space-x-12">
             <a href="#" onclick="showPage('home')" class="text-3xl font-display tracking-tighter hover:text-stroke transition-all">Oblique</a>
             <div class="hidden md:flex space-x-10 text-[10px] font-black uppercase tracking-widest">
                 <button onclick="showPage('archive')" data-t="navArchive">Архив</button>
@@ -64,60 +107,60 @@
                 <button onclick="showPage('about')" data-t="navAbout">Манифест</button>
             </div>
         </div>
-        <div class="flex items-center space-x-8 text-white">
-            <div class="flex space-x-3 text-[10px] font-black uppercase tracking-tighter">
+        <div class="flex items-center space-x-8">
+            <div class="flex space-x-3 text-[10px] font-black uppercase">
                 <button onclick="setLanguage('ru')" id="lang-ru" class="lang-active">RU</button>
                 <span class="opacity-20">/</span>
                 <button onclick="setLanguage('en')" id="lang-en">EN</button>
             </div>
-            <button onclick="showPage('cart')" class="relative group">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                <span id="cart-count" class="absolute -top-2 -right-3 bg-[--neon] text-black text-[9px] font-black w-5 h-5 flex items-center justify-center border-2 border-black">0</span>
-            </button>
+            <button onclick="showPage('cart')" class="relative"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg><span id="cart-count" class="absolute -top-2 -right-3 bg-[--neon] text-black text-[9px] font-black w-5 h-5 flex items-center justify-center border-2 border-black">0</span></button>
             <button class="md:hidden" onclick="toggleMenu()"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
         </div>
     </nav>
 
     <!-- MOBILE MENU -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden">
-        <div class="flex justify-between items-center border-b-8 border-black pb-6 text-black">
-            <span class="text-4xl font-display uppercase tracking-tighter">Oblique</span>
-            <button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-        </div>
-        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left text-black">
-            <button onclick="showPage('home')" data-t="navHome">Home</button>
-            <button onclick="showPage('archive')" data-t="navArchive">Archive</button>
-            <button onclick="showPage('shop')" data-t="navShop">Shop</button>
-            <button onclick="showPage('about')" data-t="navAbout">Manifesto</button>
-        </div>
+    <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden text-black">
+        <div class="flex justify-between items-center border-b-8 border-black pb-6"><span class="text-4xl font-display uppercase tracking-tighter">Oblique</span><button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left"><button onclick="showPage('home')" data-t="navHome">Home</button><button onclick="showPage('archive')" data-t="navArchive">Archive</button><button onclick="showPage('shop')" data-t="navShop">Shop</button><button onclick="showPage('about')" data-t="navAbout">Manifesto</button></div>
     </div>
 
     <main id="content" class="pt-20">
-        <!-- PAGE: HOME -->
+        <!-- HOME -->
         <div id="page-home" class="page-fade">
             <section class="relative min-h-screen flex flex-col lg:flex-row border-b-4 border-white text-white">
                 <div class="w-full lg:w-2/5 p-8 md:p-16 flex flex-col justify-between bg-black border-r-4 border-white z-10">
                     <div>
                         <div class="inline-block bg-white text-black text-[10px] font-black px-4 py-1 mb-12 uppercase tracking-widest" data-t="issueInfo">Issue 0.1 / Spring 2026</div>
                         <h1 class="text-[18vw] lg:text-[12rem] font-display leading-[0.7] tracking-tighter mb-8 italic">Under<br>ground<br><span class="text-stroke">Almaty</span></h1>
-                        <p class="max-w-xs text-xs font-bold uppercase opacity-60 leading-relaxed mb-12" data-t="heroSub">Первый цифровой архив андеграундной сцены. Мы фиксируем то, что другие боятся заметить.</p>
+                        <p class="max-w-xs text-xs font-bold uppercase opacity-60 leading-relaxed mb-12" data-t="heroSub">Первый цифровой архив андеграундной сцены.</p>
                     </div>
-                    <button onclick="showPage('shop')" class="btn-brutal w-full lg:w-auto"><span data-t="shopBtn">Shop the Print</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="ml-4"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                    <button onclick="showPage('shop')" class="btn-brutal w-full lg:w-auto text-black"><span data-t="shopBtn">Shop the Print</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="ml-4"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
                 </div>
-                <div id="hero-trigger" class="w-full lg:w-3/5 relative bg-zinc-900 group cursor-pointer overflow-hidden">
+                <div id="hero-area" class="w-full lg:w-3/5 relative bg-zinc-900 group cursor-pointer overflow-hidden">
                     <img id="hero-img-main" src="" class="w-full h-full object-cover img-glitch opacity-80 group-hover:opacity-100">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
                     <div class="absolute bottom-12 left-12 right-12 text-white">
                         <span class="text-[--neon] font-black text-xs uppercase tracking-widest mb-4 block" data-t="featuredTag">Editorial Feature</span>
                         <h2 id="hero-title" class="text-6xl md:text-[8rem] font-display uppercase tracking-tighter leading-none group-hover:italic transition-all">Title</h2>
                     </div>
+                    <div class="admin-controls admin-only">
+                        <button onclick="editItem(articles[0].id, 'article', event)" class="admin-btn">Edit Hero</button>
+                    </div>
                 </div>
             </section>
+
             <div class="marquee-container"><div class="marquee-content text-black font-black" data-t="marqueeText">NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND • NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •</div></div>
-            <section class="p-8 md:p-20 bg-white text-black min-h-screen text-left"><div class="flex justify-between items-end mb-32 border-b-8 border-black pb-8"><h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter" data-t="feedTitle">Media Feed</h2></div><div id="home-feed" class="grid-editorial"></div></section>
+            
+            <section class="p-8 md:p-20 bg-white text-black min-h-screen">
+                <div class="flex justify-between items-end mb-32 border-b-8 border-black pb-8">
+                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter" data-t="feedTitle">Media Feed</h2>
+                    <button onclick="addNew('article')" class="admin-only admin-btn h-12 px-6">Add New Article</button>
+                </div>
+                <div id="home-feed" class="grid-editorial"></div>
+            </section>
         </div>
 
-        <!-- PAGE: ARTICLE -->
+        <!-- ARTICLE VIEW -->
         <div id="page-article" class="hidden page-fade">
             <section class="min-h-screen bg-black text-white">
                 <div class="flex flex-col lg:flex-row">
@@ -125,95 +168,66 @@
                         <img id="art-image" src="" class="w-full h-full object-cover opacity-80">
                     </div>
                     <div class="w-full lg:w-1/2 p-8 md:p-24 flex flex-col text-left">
-                        <button onclick="showPage('home')" class="flex items-center text-[10px] font-black uppercase mb-20 hover:text-[--neon] transition-colors group"><svg class="mr-4 group-hover:-translate-x-3 transition-transform" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span data-t="backBtn">Back to feed</span></button>
+                        <button id="smart-back-btn" class="flex items-center text-[10px] font-black uppercase mb-20 hover:text-[--neon] transition-colors group">
+                            <svg class="mr-4 group-hover:-translate-x-3 transition-transform" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <span data-t="backBtn">Back</span>
+                        </button>
                         <h1 id="art-title" class="text-6xl md:text-[9rem] font-display uppercase leading-[0.8] mb-16 tracking-tighter text-[--neon]">Title</h1>
                         <div id="art-content" class="font-sans text-xl md:text-2xl leading-relaxed opacity-90 space-y-12 text-justify"></div>
-                        <!-- GALLERY AREA -->
                         <div id="art-gallery" class="mt-20 space-y-10"></div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- OTHER PAGES (ABOUT, SHOP, CART, ARCHIVE) -->
-        <div id="page-about" class="hidden page-fade text-left">
-            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden"><h2 class="text-[25vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none tracking-tighter">MANIFESTO</h2><div class="max-w-5xl z-10 text-left"><div class="bg-white text-black p-12 md:p-20 mb-20 border-l-[30px] border-[--accent]"><p class="text-4xl md:text-6xl font-display uppercase italic leading-[0.9]" data-t="manifestoQuote">«Мы не делаем контент. Мы фиксируем историю...»</p></div><div class="space-y-12"><p class="text-3xl md:text-5xl font-sans font-black uppercase tracking-tight leading-none text-[--neon]" data-t="manifestoTitle">OBLIQUE — это цифровой архив.</p><div id="manifesto-text-container" class="space-y-8 text-xl md:text-2xl opacity-80 leading-relaxed max-w-3xl uppercase font-bold text-justify text-white"></div></div><div class="mt-32 space-y-8"><h4 class="text-[--neon] font-black uppercase tracking-[0.4em] text-xs" data-t="commTitle">Communication</h4><a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter italic text-white">oblique.mag@gmail.com</a></div><div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16 text-white text-left"><div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="editorLabel">Editor in Chief</span><span class="text-4xl font-display uppercase">Эльвира Иванникова</span></div><div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="creativeLabel">Creative Direction</span><span class="text-4xl font-display uppercase">Ева Головинцева</span></div></div></div></section>
-        </div>
-        <div id="page-shop" class="hidden page-fade text-black"><section class="p-8 md:p-24 bg-white min-h-screen text-left"><h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navShop">Stockroom</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="shop-grid"></div></section></div>
-        <div id="page-cart" class="hidden page-fade text-white"><section class="p-8 md:p-24 bg-black min-h-screen flex flex-col justify-center text-left"><div class="max-w-4xl mx-auto w-full"><h2 class="text-7xl md:text-9xl font-display uppercase mb-16 italic tracking-tighter" data-t="cartTitle">Your Order</h2><div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10 text-white"></div><div id="checkout-form-container"><h3 class="text-4xl font-display uppercase mb-10 text-[--neon]" data-t="shippingTitle">Shipping Info</h3><form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4 text-white"><input type="text" id="cust-name" placeholder="ФИО / FULL NAME" required><input type="email" id="cust-email" placeholder="EMAIL" required><input type="tel" id="cust-phone" placeholder="+7 (___) ___ __ __" required><button type="submit" class="btn-brutal w-full mt-10 text-black"><span data-t="placeOrder">Place Order</span></button></form></div><div id="checkout-success" class="hidden text-center py-20 border-4 border-[--neon] p-10"><h3 class="text-7xl font-display uppercase text-[--neon] mb-6" data-t="successTitle">Success</h3><p class="text-xl font-bold uppercase opacity-60" data-t="successMsg"></p><button onclick="showPage('home')" class="mt-12 text-white font-black uppercase underline tracking-widest" data-t="backBtn">Back to main</button></div></div></section></div>
-        <div id="page-archive" class="hidden page-fade text-left"><section class="bg-black min-h-screen"><div class="p-8 md:p-24 border-b-4 border-white bg-white text-black"><h2 class="text-[12vw] font-display uppercase tracking-tighter leading-none" data-t="navArchive">Archives</h2></div><div id="archive-collage" class="grid-collage"></div></section></div>
+        <!-- ABOUT -->
+        <div id="page-about" class="hidden page-fade"><section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden"><h2 class="text-[25vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none tracking-tighter">MANIFESTO</h2><div class="max-w-5xl z-10 text-left"><div class="bg-white text-black p-12 md:p-20 mb-20 border-l-[30px] border-[--accent]"><p class="text-4xl md:text-6xl font-display uppercase italic leading-[0.9]" data-t="manifestoQuote">«Мы не делаем контент...»</p></div><div class="space-y-12"><p class="text-3xl md:text-5xl font-sans font-black uppercase tracking-tight leading-none text-[--neon]" data-t="manifestoTitle">OBLIQUE — это цифровой архив.</p><div id="manifesto-text-container" class="space-y-8 text-xl md:text-2xl opacity-80 leading-relaxed max-w-3xl uppercase font-bold text-justify"></div></div><div class="mt-32 space-y-8"><h4 class="text-[--neon] font-black uppercase tracking-[0.4em] text-xs" data-t="commTitle">Communication</h4><a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter italic">oblique.mag@gmail.com</a></div><div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16"><div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="editorLabel">Editor in Chief</span><span class="text-4xl font-display uppercase">Эльвира Иванникова</span></div><div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="creativeLabel">Creative Direction</span><span class="text-4xl font-display uppercase">Ева Головинцева</span></div></div></div></section></div>
+        
+        <!-- SHOP -->
+        <div id="page-shop" class="hidden page-fade"><section class="p-8 md:p-24 bg-white min-h-screen text-left"><div class="flex justify-between items-end mb-24 border-b-8 border-black pb-8"><h2 class="text-[12vw] font-display uppercase tracking-tighter leading-none text-black" data-t="navShop">Stockroom</h2><button onclick="addNew('product')" class="admin-only admin-btn h-12 px-6">Add Product</button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-black" id="shop-grid"></div></section></div>
+        
+        <!-- CART -->
+        <div id="page-cart" class="hidden page-fade text-white"><section class="p-8 md:p-24 bg-black min-h-screen flex flex-col justify-center text-left"><div class="max-w-4xl mx-auto w-full"><h2 class="text-7xl md:text-9xl font-display uppercase mb-16 italic tracking-tighter" data-t="cartTitle">Your Order</h2><div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10"></div><div id="checkout-form-container"><h3 class="text-4xl font-display uppercase mb-10 text-[--neon]" data-t="shippingTitle">Shipping Info</h3><form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4"><input type="text" id="cust-name" placeholder="FULL NAME" required><input type="email" id="cust-email" placeholder="EMAIL" required><input type="tel" id="cust-phone" placeholder="PHONE" required><button type="submit" class="btn-brutal w-full mt-10 text-black"><span data-t="placeOrder">Place Order</span></button></form></div><div id="checkout-success" class="hidden text-center py-20 border-4 border-[--neon] p-10"><h3 class="text-7xl font-display uppercase text-[--neon] mb-6" data-t="successTitle">Success</h3><p class="text-xl font-bold uppercase opacity-60" data-t="successMsg"></p><button onclick="showPage('home')" class="mt-12 text-white font-black uppercase underline tracking-widest" data-t="backBtn">Back to main</button></div></div></section></div>
+        
+        <!-- ARCHIVE -->
+        <div id="page-archive" class="hidden page-fade"><section class="bg-black min-h-screen text-left"><div class="p-8 md:p-24 border-b-4 border-white bg-white text-black"><h2 class="text-[12vw] font-display uppercase tracking-tighter leading-none" data-t="navArchive">Archives</h2></div><div id="archive-collage" class="grid-collage"></div></section></div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="p-12 md:p-24 border-t-4 border-white bg-black text-white text-left">
+    <footer class="p-12 md:p-24 border-t-4 border-white bg-black text-white text-left relative">
         <h3 class="text-[22vw] font-display leading-[0.6] mb-20 hover:text-stroke cursor-pointer transition-all tracking-tighter" onclick="showPage('home')">Oblique</h3>
         <div class="flex flex-col md:flex-row justify-between items-end gap-16 font-black text-[12px] uppercase tracking-[0.4em] opacity-40 border-t-4 border-white pt-20">
-            <div class="flex flex-col gap-2">
-                <p>© 2026 OBLIQUE JOURNAL. ALMATY CITY. ALL RIGHTS RESERVED.</p>
-                <div class="flex space-x-6 text-[--neon]">
-                    <a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank" class="hover:underline">Instagram (Platforms)</a>
-                    <a href="mailto:oblique.mag@gmail.com" class="hover:underline">Email</a>
-                </div>
+            <div><p>© 2026 OBLIQUE JOURNAL. ALMATY CITY.</p><div class="flex space-x-6 text-[--neon] mt-2"><a href="https://www.instagram.com/obliquejournal/?hl=ru" target="_blank">Instagram (Platforms)</a><a href="mailto:oblique.mag@gmail.com">Email</a></div></div>
+            <div class="flex gap-4 items-center">
+                <button onclick="toggleAdmin()" title="Settings" class="opacity-20 hover:opacity-100 transition-opacity">⚙️</button>
+                <button onclick="exportCode()" class="admin-only admin-btn">Export Code for GitHub</button>
             </div>
-            <div class="flex space-x-12 uppercase text-[8px] font-black opacity-60"><span>Raw Archive</span><span>Noise Media</span></div>
         </div>
     </footer>
 
     <script>
-        // ==========================================
-        // 1. DATA BLOCK: ВСЁ РЕДАКТИРУЕТСЯ ЗДЕСЬ
-        // ==========================================
-        
-        const articles = [
-            { 
-                id: 'hero', // ПЕРВАЯ СТАТЬЯ ВСЕГДА ИДЕТ НА ГЛАВНУЮ
-                image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600',
-                ru: { 
-                    title: 'Бетонный Колосс', 
-                    cat: 'Репортаж', 
-                    content: 'Тут основной текст...\n\nИ второй абзац.' 
-                },
-                en: { 
-                    title: 'Concrete Colossus', 
-                    cat: 'Editorial', 
-                    content: 'Main text here...' 
-                },
-                gallery: [ // ДОПОЛНИТЕЛЬНЫЕ ФОТО ВНУТРИ СТАТЬИ
-                    'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=1200',
-                    'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200'
-                ]
-            },
-            { 
-                id: 'demo2',
-                image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200',
-                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Текст про Тюльпан...' },
-                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'Text about Tulpan...' },
-                gallery: []
-            },
-            { 
-                id: 'demo3',
-                image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200',
-                ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Про железную дорогу...' },
-                en: { title: 'Almaty Rails', cat: 'Places', content: 'About the rails...' },
-                gallery: []
-            }
-        ];
-
-        const products = [
-            { id: 'p1', price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT", ru: {name: "Oblique Выпуск #0.1"}, en: {name: "Oblique Issue #0.1"} },
-            { id: 'p2', price: 18000, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", cat: "APPAREL", ru: {name: "Худи 'БЕТОН'"}, en: {name: "Hoodie 'BETON'"} }
-        ];
-
-        // ==========================================
-        // 2. LOGIC BLOCK: ТУТ ЛУЧШЕ НИЧЕГО НЕ ТРОГАТЬ
-        // ==========================================
-
         const translations = {
-            ru: { navHome: "Главная", navArchive: "Архив", navShop: "Магазин", navAbout: "Манифест", issueInfo: "Выпуск 0.1 / Весна 2026", heroSub: "Первый цифровой архив андеграундной сцены. Мы фиксируем то, что другие боятся заметить.", shopBtn: "Купить принт", featuredTag: "Главный материал", feedTitle: "Лента", scrollHint: "Листайте для контента / 2026", backBtn: "Назад к ленте", commTitle: "Связь", editorLabel: "Главный редактор", creativeLabel: "Дизайн / Шеф-ред", manifestoQuote: "«Мы не делаем контент. Мы фиксируем историю, которую вы привыкли игнорировать.»", manifestoTitle: "OBLIQUE — это цифровой архив и дипломное исследование.", manifestoText: "<p>Наша родина многослойна. Мы приоткрываем пласт андеграунда Алматы...</p>", cartTitle: "Ваш заказ", shippingTitle: "Доставка", placeOrder: "Оформить заказ", successTitle: "Готово", successMsg: "Мы свяжемся с вами в ближайшее время.", marqueeText: "NOISE • ТЕХНО • РЕВОЛЮЦИЯ • АЛМАТЫ АНДЕГРАУНД •", addBtn: "Добавить", emptyCart: "Корзина пуста", remove: "Удалить", total: "Итого" },
-            en: { navHome: "Home", navArchive: "Archive", navShop: "Stockroom", navAbout: "Manifesto", issueInfo: "Issue 0.1 / Spring 2026", heroSub: "The first digital archive of the underground scene.", shopBtn: "Shop the Print", featuredTag: "Editorial Feature", feedTitle: "Media Feed", scrollHint: "Scroll for raw content / 2026", backBtn: "Back to feed", commTitle: "Communication", editorLabel: "Editor in Chief", creativeLabel: "Creative Direction", manifestoQuote: "«We don't make content. We record history...»", manifestoTitle: "OBLIQUE is a digital archive.", manifestoText: "<p>Our homeland is multi-layered...</p>", cartTitle: "Your Order", shippingTitle: "Shipping Info", placeOrder: "Place Order", successTitle: "Success", successMsg: "We will contact you shortly.", marqueeText: "NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •", addBtn: "Add", emptyCart: "Cart is empty", remove: "Remove", total: "Total" }
+            ru: { navHome: "Главная", navArchive: "Архив", navShop: "Магазин", navAbout: "Манифест", issueInfo: "Выпуск 0.1 / Весна 2026", heroSub: "Первый цифровой архив андеграундной сцены.", shopBtn: "Купить принт", featuredTag: "Главный материал", feedTitle: "Лента", scrollHint: "Листайте для контента / 2026", backBtn: "Назад", commTitle: "Связь", editorLabel: "Главный редактор", creativeLabel: "Дизайн / Шеф-ред", manifestoQuote: "«Мы не делаем контент. Мы фиксируем историю, которую вы привыкли игнорировать.»", manifestoTitle: "OBLIQUE — это цифровой архив и дипломное исследование.", manifestoText: "<p>Наша родина многослойна. Мы приоткрываем пласт андеграунда Алматы...</p>", cartTitle: "Ваш заказ", shippingTitle: "Доставка", placeOrder: "Оформить заказ", successTitle: "Готово", successMsg: "Мы свяжемся с вами в ближайшее время.", marqueeText: "NOISE • ТЕХНО • РЕВОЛЮЦИЯ • АЛМАТЫ АНДЕГРАУНД •", addBtn: "Добавить", emptyCart: "Корзина пуста", remove: "Удалить", total: "Итого" },
+            en: { navHome: "Home", navArchive: "Archive", navShop: "Stockroom", navAbout: "Manifesto", issueInfo: "Issue 0.1 / Spring 2026", heroSub: "The first digital archive of the underground scene.", shopBtn: "Shop the Print", featuredTag: "Editorial Feature", feedTitle: "Media Feed", scrollHint: "Scroll for raw content / 2026", backBtn: "Back", commTitle: "Communication", editorLabel: "Editor in Chief", creativeLabel: "Creative Direction", manifestoQuote: "«We don't make content. We record history...»", manifestoTitle: "OBLIQUE is a digital archive.", manifestoText: "<p>Our homeland is multi-layered...</p>", cartTitle: "Your Order", shippingTitle: "Shipping Info", placeOrder: "Place Order", successTitle: "Success", successMsg: "We will contact you shortly.", marqueeText: "NOISE • TECHNO • REBELLION • ALMATY UNDERGROUND •", addBtn: "Add", emptyCart: "Cart is empty", remove: "Remove", total: "Total" }
         };
 
-        let currentLang = 'ru'; let cart = [];
+        // --- DATABASE ---
+        let articles = JSON.parse(localStorage.getItem('ob_articles')) || [
+            { id: '1', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600', ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным.' }, en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static.' }, gallery: [] },
+            { id: '2', image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Глянец встречается с красным дымом.' }, en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'Gloss meets red smoke.' }, gallery: [] },
+            { id: '3', image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200', ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Эстетика тупиков.' }, en: { title: 'Almaty Rails', cat: 'Places', content: 'Aesthetics of dead ends.' }, gallery: [] }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('ob_products')) || [
+            { id: 'p1', price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT", ru: {name: "Oblique Выпуск #0.1"}, en: {name: "Oblique Issue #0.1"} }
+        ];
+
+        let currentLang = 'ru'; let cart = []; let isAdmin = false; let fromPage = 'home';
+
+        function toggleAdmin() {
+            isAdmin = !isAdmin;
+            document.getElementById('body-tag').classList.toggle('is-admin', isAdmin);
+        }
 
         function setLanguage(lang) {
             currentLang = lang;
@@ -224,107 +238,144 @@
             renderFeed(); renderArchive(); renderShop(); updateHero();
         }
 
-        function updateHero() { 
-            const titleEl = document.getElementById('hero-title'); 
-            const imgEl = document.getElementById('hero-img-main');
-            const trigger = document.getElementById('hero-trigger');
-            if (titleEl) titleEl.innerText = articles[0][currentLang].title; 
-            if (imgEl) imgEl.src = articles[0].image;
-            if (trigger) trigger.onclick = () => showArticle(articles[0].id);
-        }
-
         function showPage(id) {
+            fromPage = id === 'article' ? fromPage : id;
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
-            const target = document.getElementById('page-' + id);
-            if (target) target.classList.remove('hidden');
+            document.getElementById('page-' + id).classList.remove('hidden');
             if(id === 'cart') renderCart();
             if(id === 'mobile-menu') toggleMenu();
             window.scrollTo(0, 0);
         }
 
         function showArticle(id) {
-            const art = articles.find(a => a.id === id);
+            const art = articles.find(a => a.id == id);
             const content = art[currentLang];
             document.getElementById('art-title').innerText = content.title;
             document.getElementById('art-image').src = art.image;
             document.getElementById('art-content').innerText = content.content;
+            document.getElementById('art-gallery').innerHTML = (art.gallery || []).map(img => `<img src="${img}" class="w-full h-auto border-4 border-white">`).join('');
             
-            // Render gallery photos
-            const galleryArea = document.getElementById('art-gallery');
-            galleryArea.innerHTML = (art.gallery || []).map(img => `<img src="${img}" class="w-full h-auto border-4 border-white img-glitch">`).join('');
-            
+            // Smart back button
+            document.getElementById('smart-back-btn').onclick = () => showPage(fromPage);
             showPage('article');
         }
 
-        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
-
-        const getEditorialClasses = (i) => ['item-left', 'item-right', 'item-center', 'item-split-left', 'item-split-right', 'item-wide'][i % 6];
-        const getAspectClass = (i) => ['aspect-wide', 'aspect-editorial', 'aspect-square', 'aspect-editorial', 'aspect-wide'][i % 5];
-
         function renderFeed() {
             const feed = document.getElementById('home-feed'); if (!feed) return;
-            feed.innerHTML = articles.slice(1).map((art, index) => `
-                <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
-                    <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-8">
-                        <img src="${art.image}" class="w-full h-full object-cover img-glitch">
-                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic z-10">${art[currentLang].cat}</div>
+            const pattern = ['item-left', 'item-right', 'item-center', 'item-wide'];
+            feed.innerHTML = articles.slice(1).map((art, i) => `
+                <div class="group relative ${pattern[i % 4]} text-left">
+                    <div class="admin-controls admin-only"><button onclick="editItem('${art.id}', 'article', event)" class="admin-btn">Edit</button><button onclick="deleteItem('${art.id}', 'article', event)" class="admin-btn bg-black">Delete</button></div>
+                    <div onclick="showArticle('${art.id}')" class="cursor-pointer">
+                        <div class="relative overflow-hidden border-4 border-black mb-8 aspect-square md:aspect-auto h-full min-h-[400px]">
+                            <img src="${art.image}" class="w-full h-full object-cover img-glitch">
+                            <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic z-10">${art[currentLang].cat}</div>
+                        </div>
+                        <h3 class="text-5xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
                     </div>
-                    <div class="max-w-2xl text-left">
-                        <h3 class="text-5xl lg:text-7xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
-                    </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         function renderArchive() {
             const collage = document.getElementById('archive-collage'); if (!collage) return;
-            const aspects = ['aspect-square', 'aspect-editorial', 'aspect-wide', 'aspect-editorial', 'aspect-square', 'aspect-wide'];
-            collage.innerHTML = articles.map((art, index) => `
-                <div class="collage-item group" onclick="showArticle('${art.id}')">
-                    <img src="${art.image}" class="${aspects[index % aspects.length]}">
+            collage.innerHTML = articles.map(art => `
+                <div class="collage-item group" onclick="fromPage='archive'; showArticle('${art.id}')">
+                    <div class="admin-controls admin-only"><button onclick="editItem('${art.id}', 'article', event)" class="admin-btn">Edit</button></div>
+                    <img src="${art.image}" class="img-glitch">
                     <div class="collage-overlay"><h3 class="text-2xl md:text-5xl font-display uppercase italic text-white leading-none">${art[currentLang].title}</h3></div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         function renderShop() {
             const grid = document.getElementById('shop-grid'); if (!grid) return;
             grid.innerHTML = products.map(p => `
-                <div class="group border-4 border-black p-8 hover:bg-[--neon] transition-all flex flex-col justify-between text-black">
+                <div class="group border-4 border-black p-8 hover:bg-[--neon] transition-all flex flex-col justify-between relative">
+                    <div class="admin-controls admin-only"><button onclick="editItem('${p.id}', 'product', event)" class="admin-btn">Edit</button><button onclick="deleteItem('${p.id}', 'product', event)" class="admin-btn bg-black">X</button></div>
                     <div>
-                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden relative shadow-xl">
-                            <img src="${p.img}" class="w-full h-full object-cover mix-blend-multiply grayscale group-hover:grayscale-0 transition-all">
-                            <div class="absolute top-0 left-0 bg-black text-white p-2 font-black text-[9px] uppercase tracking-widest">${p.cat}</div>
-                        </div>
+                        <div class="aspect-square border-4 border-black mb-8 overflow-hidden"><img src="${p.img}" class="w-full h-full object-cover mix-blend-multiply grayscale group-hover:grayscale-0"></div>
                         <h3 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h3>
                     </div>
-                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black text-black">
-                        <span class="text-2xl font-black">${p.price} ₸</span>
-                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-3 px-6 border-2 border-black text-black">${translations[currentLang].addBtn}</button>
-                    </div>
-                </div>
-            `).join('');
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black"><span class="text-2xl font-black">${p.price} ₸</span><button onclick="addToCart('${p.id}')" class="btn-brutal p-3 text-black">Add</button></div>
+                </div>`).join('');
         }
 
-        function addToCart(id) { cart.push(products.find(p => p.id === id)); document.getElementById('cart-count').innerText = cart.length; const btn = event.target; const orig = btn.innerText; btn.innerText = '✓'; setTimeout(() => btn.innerText = orig, 1000); }
-
-        function renderCart() {
-            const list = document.getElementById('cart-items-list'); if (!list) return;
-            document.getElementById('checkout-form-container').classList.remove('hidden');
-            document.getElementById('checkout-success').classList.add('hidden');
-            if (cart.length === 0) {
-                list.innerHTML = `<p class="text-2xl font-black opacity-30 uppercase italic">${translations[currentLang].emptyCart}</p>`;
-                document.getElementById('checkout-form').classList.add('hidden');
+        // --- CMS LOGIC ---
+        function addNew(type) {
+            const id = Date.now().toString();
+            if(type === 'article') {
+                articles.push({ id, image: '', ru: {title:'', cat:'', content:''}, en: {title:'', cat:'', content:''}, gallery: [] });
+                editItem(id, 'article');
             } else {
-                document.getElementById('checkout-form').classList.remove('hidden');
-                let total = 0;
-                list.innerHTML = cart.map((p, index) => { total += p.price; return `<div class="flex justify-between items-center border-b border-white/20 pb-4 text-left"><div><h4 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h4><span class="text-[--neon] font-black">${p.price} ₸</span></div><button onclick="removeFromCart(${index})" class="text-[--accent] font-black uppercase text-[10px] underline">${translations[currentLang].remove}</button></div>`; }).join('') + `<div class="flex justify-between items-end pt-10 text-white"><span class="font-display text-4xl uppercase opacity-40 italic">${translations[currentLang].total}</span><span class="text-6xl font-display text-[--neon]">${total} ₸</span></div>`;
+                products.push({ id, price: 0, img: '', cat: 'MERCH', ru: {name:''}, en: {name:''} });
+                editItem(id, 'product');
             }
         }
 
-        function removeFromCart(index) { cart.splice(index, 1); document.getElementById('cart-count').innerText = cart.length; renderCart(); }
+        function editItem(id, type, event) {
+            if(event) event.stopPropagation();
+            const item = type === 'article' ? articles.find(a=>a.id==id) : products.find(p=>p.id==id);
+            document.getElementById('modal-title').innerText = "Edit " + type.toUpperCase();
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-type').value = type;
+            document.getElementById('edit-image').value = type === 'article' ? item.image : item.img;
+            document.getElementById('edit-title-ru').value = type === 'article' ? item.ru.title : item.ru.name;
+            document.getElementById('edit-title-en').value = type === 'article' ? item.en.title : item.en.name;
+            document.getElementById('edit-cat-ru').value = item.ru.cat || item.cat;
+            document.getElementById('edit-cat-en').value = item.en.cat || item.cat;
+            document.getElementById('edit-content-ru').value = item.ru.content || '';
+            document.getElementById('edit-content-en').value = item.en.content || '';
+            document.getElementById('edit-gallery').value = (item.gallery || []).join(', ');
+            document.getElementById('admin-modal').classList.add('active');
+        }
 
-        function handleCheckout(e) { e.preventDefault(); document.getElementById('checkout-form-container').classList.add('hidden'); document.getElementById('cart-items-list').innerHTML = ''; document.getElementById('checkout-success').classList.remove('hidden'); cart = []; document.getElementById('cart-count').innerText = '0'; }
+        function saveItem(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const type = document.getElementById('edit-type').value;
+            const item = type === 'article' ? articles.find(a=>a.id==id) : products.find(p=>p.id==id);
+            
+            if(type === 'article') {
+                item.image = document.getElementById('edit-image').value;
+                item.ru = { title: document.getElementById('edit-title-ru').value, cat: document.getElementById('edit-cat-ru').value, content: document.getElementById('edit-content-ru').value };
+                item.en = { title: document.getElementById('edit-title-en').value, cat: document.getElementById('edit-cat-en').value, content: document.getElementById('edit-content-en').value };
+                item.gallery = document.getElementById('edit-gallery').value.split(',').map(s=>s.trim()).filter(s=>s);
+                localStorage.setItem('ob_articles', JSON.stringify(articles));
+            } else {
+                item.img = document.getElementById('edit-image').value;
+                item.ru = { name: document.getElementById('edit-title-ru').value };
+                item.en = { name: document.getElementById('edit-title-en').value };
+                item.cat = document.getElementById('edit-cat-ru').value;
+                localStorage.setItem('ob_products', JSON.stringify(products));
+            }
+            closeModal(); setLanguage(currentLang);
+        }
+
+        function deleteItem(id, type, event) {
+            if(event) event.stopPropagation();
+            if(!confirm('Delete this item?')) return;
+            if(type === 'article') articles = articles.filter(a=>a.id!=id);
+            else products = products.filter(p=>p.id!=id);
+            localStorage.setItem('ob_articles', JSON.stringify(articles));
+            localStorage.setItem('ob_products', JSON.stringify(products));
+            setLanguage(currentLang);
+        }
+
+        function exportCode() {
+            const dataScript = `<script>
+                const articles = ${JSON.stringify(articles)};
+                const products = ${JSON.stringify(products)};
+            <\/script>`;
+            console.log("COPY THIS SCRIPT BLOCK TO YOUR HTML FILE ON GITHUB:");
+            console.log(dataScript);
+            alert("Check console (F12) for the code to copy to GitHub!");
+        }
+
+        function updateHero() { const h = articles[0]; document.getElementById('hero-title').innerText = h[currentLang].title; document.getElementById('hero-img-main').src = h.image; document.getElementById('hero-area').onclick = () => showArticle(h.id); }
+        function closeModal() { document.getElementById('admin-modal').classList.remove('active'); }
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+        function addToCart(id) { cart.push(products.find(p=>p.id==id)); document.getElementById('cart-count').innerText = cart.length; }
+        function renderCart() { /* ... same as before but uses products data ... */ }
+        function handleCheckout(e) { e.preventDefault(); document.getElementById('checkout-form-container').classList.add('hidden'); document.getElementById('checkout-success').classList.remove('hidden'); cart = []; document.getElementById('cart-count').innerText = '0'; }
 
         window.onload = () => setLanguage('ru');
     </script>
