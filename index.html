@@ -24,9 +24,6 @@
             background-image: url('https://grainy-gradients.vercel.app/noise.svg'); 
         }
 
-        .border-heavy { border: 4px solid #fff; }
-        .border-b-heavy { border-bottom: 4px solid #fff; }
-        
         .btn-brutal { 
             background: #fff; color: #000; padding: 20px; font-weight: 900; 
             text-transform: uppercase; transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
@@ -42,8 +39,8 @@
         .marquee-container { overflow: hidden; white-space: nowrap; background: var(--neon); color: #000; padding: 15px 0; border-y: 4px solid #000; }
         .marquee-content { display: inline-block; animation: scroll 20s linear infinite; font-weight: 900; text-transform: uppercase; font-size: 14px; letter-spacing: 0.2em; }
 
-        .img-glitch { filter: grayscale(1) contrast(1.2); transition: 0.5s; }
-        .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.02); }
+        .img-glitch { filter: grayscale(1) contrast(1.1); transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .group:hover .img-glitch { filter: grayscale(0) contrast(1); transform: scale(1.03); }
 
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: #000; }
@@ -58,14 +55,29 @@
 
         .lang-active { color: var(--neon); text-decoration: underline; }
 
-        /* Chaotic Layout Utility */
-        .card-wide { grid-column: span 1; }
-        @media (min-width: 768px) {
-            .card-wide { grid-column: span 2; }
-            .card-tall { grid-row: span 2; }
-            .card-offset-up { transform: translateY(-30px); }
-            .card-offset-down { transform: translateY(50px); }
+        /* Structured Chaos Grid */
+        .grid-editorial {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 4rem;
         }
+        @media (min-width: 1024px) {
+            .grid-editorial {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 2rem;
+            }
+            .item-large { grid-column: span 8; }
+            .item-small { grid-column: span 4; }
+            .item-medium { grid-column: span 6; }
+            .item-full { grid-column: span 12; }
+            
+            .offset-top { margin-top: 6rem; }
+            .offset-bottom { margin-top: -4rem; }
+        }
+
+        .aspect-editorial { aspect-ratio: 4 / 5; }
+        .aspect-wide { aspect-ratio: 16 / 9; }
+        .aspect-square { aspect-ratio: 1 / 1; }
     </style>
 </head>
 <body>
@@ -101,10 +113,10 @@
     <!-- MOBILE MENU -->
     <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden">
         <div class="flex justify-between items-center border-b-8 border-black pb-6">
-            <span class="text-4xl font-display uppercase tracking-tighter">Oblique</span>
+            <span class="text-4xl font-display uppercase tracking-tighter text-black">Oblique</span>
             <button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
-        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left">
+        <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left text-black">
             <button onclick="showPage('home')" data-t="navHome">Home</button>
             <button onclick="showPage('archive')" data-t="navArchive">Archive</button>
             <button onclick="showPage('shop')" data-t="navShop">Shop</button>
@@ -134,7 +146,7 @@
                 <div class="w-full lg:w-3/5 relative bg-zinc-900 group cursor-pointer overflow-hidden" onclick="showArticle('demo1')">
                     <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover img-glitch opacity-80 group-hover:opacity-100">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                    <div class="absolute bottom-12 left-12 right-12 text-white">
+                    <div class="absolute bottom-12 left-12 right-12">
                         <span class="text-[--neon] font-black text-xs uppercase tracking-widest mb-4 block" data-t="featuredTag">Editorial Feature</span>
                         <h2 id="hero-title" class="text-6xl md:text-[8rem] font-display uppercase tracking-tighter leading-none group-hover:italic transition-all">The Concrete Colossus</h2>
                     </div>
@@ -146,13 +158,14 @@
             </div>
 
             <section class="p-8 md:p-20 bg-white text-black min-h-screen">
-                <div class="flex justify-between items-end mb-24 border-b-8 border-black pb-8">
-                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter text-black" data-t="feedTitle">Media Feed</h2>
+                <div class="flex justify-between items-end mb-32 border-b-8 border-black pb-8">
+                    <h2 class="text-7xl md:text-[10rem] font-display uppercase tracking-tighter" data-t="feedTitle">Media Feed</h2>
                     <span class="font-black text-xs uppercase opacity-30 mb-4 hidden md:block" data-t="scrollHint">Scroll for raw content / 2026</span>
                 </div>
                 
-                <!-- Chaotic Grid -->
-                <div id="home-feed" class="grid grid-cols-1 md:grid-cols-3 gap-y-24 md:gap-x-12 lg:gap-x-20 grid-flow-dense"></div>
+                <div id="home-feed" class="grid-editorial">
+                    <!-- Dynamic Grid Content -->
+                </div>
             </section>
         </div>
 
@@ -160,7 +173,7 @@
         <div id="page-article" class="hidden page-fade">
             <section class="min-h-screen bg-black text-white">
                 <div class="flex flex-col lg:flex-row">
-                    <div class="w-full lg:w-1/2 h-[80vh] lg:h-screen lg:sticky top-0 border-r-4 border-white">
+                    <div class="w-full lg:w-1/2 h-[80vh] lg:h-screen lg:sticky top-0 border-r-4 border-white overflow-hidden">
                         <img id="art-image" src="" class="w-full h-full object-cover grayscale opacity-80">
                     </div>
                     <div class="w-full lg:w-1/2 p-8 md:p-24 flex flex-col text-left">
@@ -191,7 +204,7 @@
                         <h4 class="text-[--neon] font-black uppercase tracking-[0.4em] text-xs" data-t="commTitle">Communication</h4>
                         <a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter italic">oblique.mag@gmail.com</a>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16 text-white text-left">
                         <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="editorLabel">Editor in Chief</span><span class="text-4xl font-display uppercase">Эльвира Иванникова</span></div>
                         <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="creativeLabel">Creative Direction</span><span class="text-4xl font-display uppercase">Ева Головинцева</span></div>
                     </div>
@@ -200,8 +213,8 @@
         </div>
 
         <!-- SHOP -->
-        <div id="page-shop" class="hidden page-fade">
-            <section class="p-8 md:p-24 bg-white text-black min-h-screen text-left">
+        <div id="page-shop" class="hidden page-fade text-black">
+            <section class="p-8 md:p-24 bg-white min-h-screen text-left">
                 <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navShop">Stockroom</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10" id="shop-grid"></div>
             </section>
@@ -215,7 +228,7 @@
                     <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10"></div>
                     <div id="checkout-form-container">
                         <h3 class="text-4xl font-display uppercase mb-10 text-[--neon]" data-t="shippingTitle">Shipping Info</h3>
-                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4 text-left">
+                        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4">
                             <input type="text" id="cust-name" placeholder="ФИО / FULL NAME" required>
                             <input type="email" id="cust-email" placeholder="EMAIL" required>
                             <input type="tel" id="cust-phone" placeholder="+7 (___) ___ __ __" required>
@@ -235,9 +248,7 @@
         <div id="page-archive" class="hidden page-fade">
             <section class="p-8 md:p-24 bg-white text-black min-h-screen text-left">
                 <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navArchive">Archives</h2>
-                
-                <!-- Chaotic Archive Grid -->
-                <div id="archive-list" class="grid grid-cols-1 md:grid-cols-3 gap-y-24 md:gap-x-12 lg:gap-x-20 grid-flow-dense pt-12"></div>
+                <div id="archive-list" class="grid-editorial mt-12"></div>
             </section>
         </div>
     </main>
@@ -292,33 +303,38 @@
             }
         };
 
-        const articles = {
-            'demo1': { 
-                ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния, выталкивает из себя старые смыслы. Алматы сегодня — это не просто фасады зданий и сетка улиц. Это сложная экосистема, которая считывается через андеграунд.\n\nКолосс — это место силы, бывший дом печати, где бетон говорит громче людей. Мы исследовали каждый этаж этого индустриального монстра.' },
-                en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. It pulsates, changes states, expels old meanings. Almaty today is not just building facades and street grids. It\'s a complex ecosystem read through the underground.\n\nColossus is a place of power, a former printing house where concrete speaks louder than people.' },
+        const articles = [
+            { 
+                id: 'demo1',
+                ru: { title: 'Бетонный Колосс', cat: 'Репортаж', content: 'Городское пространство редко бывает статичным. Оно пульсирует, меняет агрегатные состояния. Колосс — это место силы, бывший дом печати, где бетон говорит громче людей.' },
+                en: { title: 'Concrete Colossus', cat: 'Editorial', content: 'Urban space is rarely static. It pulsates, changes states. Colossus is a place of power, a former printing house where concrete speaks louder than people.' },
                 image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1600'
             },
-            'demo2': { 
-                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Днем — стерильный бокс для съемок. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом. Здесь создается новая визуальная культура Казахстана.' },
-                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'By day — a sterile box for shoots. By night — the vibrating reservoir of VIKHOD. Gloss meets red smoke. This is where Kazakhstan\'s new visual culture is born.' },
+            { 
+                id: 'demo2',
+                ru: { title: 'Tulpan Berlin: Красный Дым', cat: 'Культура', content: 'Днем — стерильный бокс для съемок. Ночью — вибрирующий резервуар ВИХОД. Глянец встречается с красным дымом.' },
+                en: { title: 'Tulpan Berlin: Red Smoke', cat: 'Culture', content: 'By day — a sterile box for shoots. By night — the vibrating reservoir of VIKHOD. Gloss meets red smoke.' },
                 image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?auto=format&fit=crop&q=80&w=1200'
             },
-            'demo3': { 
+            { 
+                id: 'demo3',
                 ru: { title: 'Рельсы Алматы', cat: 'Места', content: 'Железная дорога как граница между прошлым и будущим южной столицы. Эстетика тупиков и бесконечных путей.' },
-                en: { title: 'Almaty Rails', cat: 'Places', content: 'The railroad as a border between the past and future of the southern capital. Aesthetics of dead ends and infinite paths.' },
+                en: { title: 'Almaty Rails', cat: 'Places', content: 'The railroad as a border between the past and future of the southern capital.' },
                 image: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?auto=format&fit=crop&q=80&w=1200'
             },
-            'demo4': { 
+            { 
+                id: 'demo4',
                 ru: { title: 'Ночной Базар', cat: 'Стиль', content: 'Рынок как место пересечения культур. Визуальный шум и честная жизнь ночного города.' },
                 en: { title: 'Night Bazaar', cat: 'Style', content: 'The market as a crossroads of cultures. Visual noise and the honest life of the city at night.' },
                 image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1200'
             },
-            'demo5': { 
+            { 
+                id: 'demo5',
                 ru: { title: 'Техно-Степь', cat: 'Музыка', content: 'Как электронная музыка адаптируется к локальным ландшафтам.' },
                 en: { title: 'Techno-Steppe', cat: 'Music', content: 'How electronic music adapts to local landscapes.' },
                 image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1200'
             }
-        };
+        ];
 
         const products = [
             { id: 'p1', ru: {name: "Oblique Выпуск #0.1"}, en: {name: "Oblique Issue #0.1"}, price: 5000, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800", cat: "PRINT" },
@@ -342,19 +358,22 @@
             renderFeed(); renderArchive(); renderShop(); updateHero();
         }
 
-        function updateHero() { document.getElementById('hero-title').innerText = articles['demo1'][currentLang].title; }
+        function updateHero() { 
+            const titleEl = document.getElementById('hero-title');
+            if (titleEl) titleEl.innerText = articles[0][currentLang].title; 
+        }
 
         function showPage(id) {
             document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
             const target = document.getElementById('page-' + id);
             if (target) target.classList.remove('hidden');
-            if (id === 'cart') renderCart();
-            if (id === 'mobile-menu') toggleMenu();
+            if(id === 'cart') renderCart();
+            if(id === 'mobile-menu') toggleMenu();
             window.scrollTo(0, 0);
         }
 
         function showArticle(id) {
-            const art = articles[id];
+            const art = articles.find(a => a.id === id);
             const content = art[currentLang];
             document.getElementById('art-title').innerText = content.title;
             document.getElementById('art-image').src = art.image;
@@ -364,74 +383,87 @@
 
         function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
-        const getCardStyle = (index) => {
-            const styles = [
-                'card-wide',
-                'card-tall card-offset-down',
-                'card-offset-up',
-                'card-wide',
-                'card-tall',
-                'card-offset-down'
+        const getEditorialClasses = (index) => {
+            const pattern = [
+                'item-large', 
+                'item-small offset-top', 
+                'item-medium', 
+                'item-medium offset-bottom', 
+                'item-small', 
+                'item-large offset-top'
             ];
-            return styles[index % styles.length];
+            return pattern[index % pattern.length];
+        };
+
+        const getAspectClass = (index) => {
+            const aspects = ['aspect-wide', 'aspect-editorial', 'aspect-square', 'aspect-editorial', 'aspect-wide'];
+            return aspects[index % aspects.length];
         };
 
         function renderFeed() {
-            const feed = document.getElementById('home-feed'); if (!feed) return;
-            feed.innerHTML = Object.entries(articles).slice(1).map(([id, art], index) => `
-                <div class="group cursor-pointer text-left ${getCardStyle(index)}" onclick="showArticle('${id}')">
-                    <div class="relative overflow-hidden border-4 border-black aspect-[10/12] md:aspect-auto h-full min-h-[400px] mb-8">
+            const feed = document.getElementById('home-feed');
+            if (!feed) return;
+            feed.innerHTML = articles.slice(1).map((art, index) => `
+                <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
+                    <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-8">
                         <img src="${art.image}" class="w-full h-full object-cover img-glitch">
-                        <div class="absolute top-0 right-0 bg-black text-white p-4 font-display text-xl italic">${art[currentLang].cat}</div>
+                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic">${art[currentLang].cat}</div>
                     </div>
-                    <h3 class="text-4xl lg:text-5xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+                    <div class="max-w-lg">
+                        <h3 class="text-4xl lg:text-6xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+                        <p class="text-[10px] font-black uppercase opacity-30 mt-4 tracking-widest">Issue 0.1 / Spring 2026</p>
+                    </div>
                 </div>
             `).join('');
         }
 
         function renderArchive() {
-            const list = document.getElementById('archive-list'); if (!list) return;
-            // Using same chaotic grid logic for archive to satisfy "scattered" request
-            list.innerHTML = Object.entries(articles).map(([id, art], index) => `
-                <div class="group cursor-pointer text-left ${getCardStyle(index)}" onclick="showArticle('${id}')">
-                    <div class="relative overflow-hidden border-4 border-black aspect-[10/12] md:aspect-auto h-full min-h-[300px] mb-6">
+            const list = document.getElementById('archive-list');
+            if (!list) return;
+            list.innerHTML = articles.map((art, index) => `
+                <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
+                    <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-6">
                         <img src="${art.image}" class="w-full h-full object-cover img-glitch">
                         <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic">${art[currentLang].cat}</div>
                     </div>
                     <h3 class="text-3xl lg:text-4xl font-display uppercase leading-none group-hover:text-[--neon] transition-colors tracking-tighter">${art[currentLang].title}</h3>
-                    <p class="text-[10px] font-black uppercase opacity-30 mt-2">Issue 0.1 / Archive</p>
                 </div>
             `).join('');
         }
 
         function renderShop() {
-            const grid = document.getElementById('shop-grid'); if (!grid) return;
+            const grid = document.getElementById('shop-grid');
+            if (!grid) return;
             grid.innerHTML = products.map(p => `
-                <div class="group border-4 border-black p-10 hover:bg-[--neon] transition-all flex flex-col justify-between text-left">
+                <div class="group border-4 border-black p-8 hover:bg-[--neon] transition-all flex flex-col justify-between text-black">
                     <div>
-                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden relative">
+                        <div class="aspect-square bg-zinc-100 border-4 border-black mb-8 overflow-hidden relative shadow-xl">
                             <img src="${p.img}" class="w-full h-full object-cover mix-blend-multiply grayscale group-hover:grayscale-0 transition-all">
                             <div class="absolute top-0 left-0 bg-black text-white p-2 font-black text-[9px] uppercase tracking-widest">${p.cat}</div>
                         </div>
-                        <h3 class="text-4xl font-display uppercase tracking-tighter">${p[currentLang].name}</h3>
+                        <h3 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h3>
                     </div>
                     <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black">
                         <span class="text-2xl font-black">${p.price} ₸</span>
-                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-4 px-8 border-2 border-black">${translations[currentLang].addBtn}</button>
+                        <button onclick="addToCart('${p.id}')" class="btn-brutal p-3 px-6 border-2 border-black">${translations[currentLang].addBtn}</button>
                     </div>
                 </div>
             `).join('');
         }
 
         function addToCart(id) {
-            cart.push(products.find(p => p.id === id));
+            const product = products.find(p => p.id === id);
+            cart.push(product);
             document.getElementById('cart-count').innerText = cart.length;
-            const btn = event.target; const orig = btn.innerText; btn.innerText = '✓';
+            const btn = event.target;
+            const orig = btn.innerText;
+            btn.innerText = '✓';
             setTimeout(() => btn.innerText = orig, 1000);
         }
 
         function renderCart() {
-            const list = document.getElementById('cart-items-list'); if (!list) return;
+            const list = document.getElementById('cart-items-list');
+            if (!list) return;
             document.getElementById('checkout-form-container').classList.remove('hidden');
             document.getElementById('checkout-success').classList.add('hidden');
             if (cart.length === 0) {
@@ -458,15 +490,19 @@
             }
         }
 
-        function removeFromCart(index) { cart.splice(index, 1); document.getElementById('cart-count').innerText = cart.length; renderCart(); }
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').innerText = cart.length;
+            renderCart();
+        }
 
         function handleCheckout(e) {
             e.preventDefault();
             document.getElementById('checkout-form-container').classList.add('hidden');
             document.getElementById('cart-items-list').innerHTML = '';
             document.getElementById('checkout-success').classList.remove('hidden');
-            document.getElementById('checkout-success').querySelector('p').innerText = translations[currentLang].successMsg;
-            cart = []; document.getElementById('cart-count').innerText = '0';
+            cart = [];
+            document.getElementById('cart-count').innerText = '0';
         }
 
         window.onload = () => {
