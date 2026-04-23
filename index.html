@@ -58,12 +58,9 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // ==========================================
-        // 🚨 ШАГ 1: ВСТАВЬ СЮДА КЛЮЧИ ИЗ SUPABASE
-        // ==========================================
+        // Ключи Supabase интегрированы!
         const SUPABASE_URL = "https://hsoripgdieuyiiachzfx.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzb3JpcGdkaWV1eWlpYWNoemZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4OTczNDEsImV4cCI6MjA5MjQ3MzM0MX0.sUmm4kL_RbojRgtZLIzzOPBuv0p8dH95C_7qLKJSzs0"; 
-        // ==========================================
 
         const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY) 
             ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
@@ -148,9 +145,19 @@
             const [articles, setArticles] = useState(DEFAULT_ARTICLES);
             const [isDemo, setIsDemo] = useState(true);
 
+            // Состояния Админки (вынесены в App, чтобы не сбрасывались)
+            const [adminPass, setAdminPass] = useState("");
+            const [isAdminAuthed, setIsAdminAuthed] = useState(false);
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [newArt, setNewArt] = useState({
+                title_ru: '', title_en: '', category_ru: 'МЕСТА', category_en: 'PLACES', 
+                tagsStr: '', author: 'Редакция', readTime: '5', image: '', 
+                description_ru: '', description_en: '', quote_ru: '', quote_en: '', 
+                content_ru: '', content_en: ''
+            });
+
             const t = DICT[lang];
 
-            // Загрузка данных из Supabase
             useEffect(() => {
                 const fetchArticles = async () => {
                     if (supabase) {
@@ -159,7 +166,6 @@
                             if (error) throw error;
                             
                             if (data && data.length > 0) {
-                                // Достаем данные из умной колонки payload
                                 const parsedArticles = data.map(item => ({
                                     id: item.id,
                                     ...item.payload
@@ -214,62 +220,73 @@
                 </nav>
             );
 
-            // CMS (Админка)
-            const AdminPanel = () => {
-                const [pass, setPass] = useState("");
-                const [authed, setAuthed] = useState(false);
-                const [isSubmitting, setIsSubmitting] = useState(false);
-                const [newArt, setNewArt] = useState({
-                    title_ru: '', title_en: '', category_ru: 'МЕСТА', category_en: 'PLACES', 
-                    tagsStr: '', author: 'Редакция', readTime: '5', image: '', 
-                    description_ru: '', description_en: '', quote_ru: '', quote_en: '', 
-                    content_ru: '', content_en: ''
-                });
+            const handleAdminLogin = () => {
+                if (adminPass.trim().toLowerCase() === "admin") {
+                    setIsAdminAuthed(true);
+                } else {
+                    alert("Неверный пароль!");
+                }
+            };
 
-                const handleAdd = async () => {
-                    if (!supabase) return alert("Supabase не подключен! Вставь ключи в код.");
-                    if (!newArt.title_ru || !newArt.image) return alert("Заголовок (RU) и фото обязательны.");
+            const handleAddArticle = async () => {
+                if (!supabase) return alert("Supabase не подключен! Проверь ключи.");
+                if (!newArt.title_ru || !newArt.image) return alert("Заголовок (RU) и фото обязательны.");
+                
+                setIsSubmitting(true);
+                try {
+                    const tagsArray = newArt.tagsStr.split(',').map(t => t.trim().toUpperCase()).filter(t => t);
+                    const date = new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                    const payload = {
+                        ...newArt, tags: tagsArray, date: date, createdAt: Date.now()
+                    };
+
+                    const { error } = await supabase.from('articles').insert([{ payload }]);
                     
-                    setIsSubmitting(true);
-                    try {
-                        const tagsArray = newArt.tagsStr.split(',').map(t => t.trim().toUpperCase()).filter(t => t);
-                        const date = new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-                        const payload = {
-                            ...newArt, tags: tagsArray, date: date, createdAt: Date.now()
-                        };
-
-                        // Сохраняем всю статью в одну колонку payload (тип jsonb)
-                        const { error } = await supabase.from('articles').insert([{ payload }]);
-                        
-                        if (error) throw error;
-                        
-                        alert("Статья успешно опубликована!");
-                        window.location.reload(); // Перезагрузим, чтобы подтянуть новые данные
-                    } catch(e) { 
-                        console.error(e); 
-                        alert("Ошибка сохранения: " + e.message);
+                    if (error) throw error;
+                    
+                    alert("Статья успешно опубликована!");
+                    setNewArt({ title_ru: '', title_en: '', category_ru: 'МЕСТА', category_en: 'PLACES', tagsStr: '', author: 'Редакция', readTime: '5', image: '', description_ru: '', description_en: '', quote_ru: '', quote_en: '', content_ru: '', content_en: ''});
+                    
+                    // Динамическое обновление списка статей
+                    const { data } = await supabase.from('articles').select('*');
+                    if (data) {
+                        const parsedArticles = data.map(item => ({ id: item.id, ...item.payload })).sort((a, b) => b.createdAt - a.createdAt);
+                        setArticles(parsedArticles);
                     }
-                    setIsSubmitting(false);
-                };
+                } catch(e) { 
+                    console.error(e); 
+                    alert("Ошибка сохранения: " + e.message);
+                }
+                setIsSubmitting(false);
+            };
 
-                const handleDelete = async (id) => {
-                    if (isDemo || !supabase) return alert("Нельзя удалить: подключи свою БД.");
-                    if (!confirm("Удалить статью навсегда?")) return;
-                    try {
-                        await supabase.from('articles').delete().eq('id', id);
-                        window.location.reload();
-                    } catch(e) { console.error(e); }
-                };
+            const handleDeleteArticle = async (id) => {
+                if (isDemo || !supabase) return alert("Нельзя удалить: подключи свою БД.");
+                if (!confirm("Удалить статью навсегда?")) return;
+                try {
+                    await supabase.from('articles').delete().eq('id', id);
+                    setArticles(articles.filter(a => a.id !== id));
+                } catch(e) { console.error(e); }
+            };
 
-                if (!authed) return (
+            // Функция рендера админки (вынесена из компонентов, чтобы не сбрасывалась при обновлении)
+            const renderAdminPanel = () => {
+                if (!isAdminAuthed) return (
                     <div className="fixed inset-0 bg-[#F4F4F0] z-[100] flex items-center justify-center p-6">
                         <div className="border-brutal p-8 bg-white shadow-brutal text-center max-w-xs w-full">
                             <h2 className="text-2xl font-display mb-6">{t.admin.login}</h2>
-                            <input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="PASSWORD" className="w-full border-brutal p-3 mb-4 font-sans text-center" />
+                            <input 
+                                type="password" 
+                                value={adminPass} 
+                                onChange={e => setAdminPass(e.target.value)} 
+                                onKeyDown={e => e.key === 'Enter' && handleAdminLogin()}
+                                placeholder="ПАРОЛЬ (admin)" 
+                                className="w-full border-brutal p-3 mb-4 font-sans text-center" 
+                            />
                             <div className="flex gap-2">
                                 <button onClick={() => setIsAdminMode(false)} className="w-1/2 border-brutal p-3 font-bold text-[10px] uppercase hover:bg-black hover:text-white">{t.admin.cancel}</button>
-                                <button onClick={() => pass === "admin" && setAuthed(true)} className="w-1/2 bg-[#CCFF00] border-brutal p-3 font-bold text-[10px] uppercase">{t.admin.enter}</button>
+                                <button onClick={handleAdminLogin} className="w-1/2 bg-[#CCFF00] border-brutal p-3 font-bold text-[10px] uppercase">{t.admin.enter}</button>
                             </div>
                         </div>
                     </div>
@@ -280,47 +297,46 @@
                         <div className="max-w-6xl mx-auto bg-white border-brutal p-8 shadow-brutal">
                             <div className="flex justify-between items-end border-b-brutal pb-4 mb-8">
                                 <h2 className="text-4xl font-display">{t.admin.cms}</h2>
-                                <button onClick={() => setIsAdminMode(false)} className="font-bold text-[10px] uppercase">{t.admin.close}</button>
+                                <button onClick={() => setIsAdminMode(false)} className="font-bold text-[10px] uppercase hover:text-[#FF00FF]">{t.admin.close}</button>
                             </div>
-                            {isDemo && <p className="bg-[#FF00FF] text-white p-3 font-bold text-xs mb-8 uppercase border-brutal border-black">Внимание: Подключи ключи Supabase в коде, чтобы статьи сохранялись навсегда!</p>}
                             
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                                 <div className="space-y-4 font-sans text-xs">
                                     <h3 className="font-display text-2xl text-[#0033FF]">ДОБАВИТЬ СТАТЬЮ</h3>
-                                    <input placeholder="Фото URL" value={newArt.image} onChange={e=>setNewArt({...newArt, image: e.target.value})} className="w-full border-brutal p-2" />
-                                    <input placeholder="Теги (через запятую)" value={newArt.tagsStr} onChange={e=>setNewArt({...newArt, tagsStr: e.target.value})} className="w-full border-brutal p-2" />
+                                    <input placeholder="Фото URL (https://...)" value={newArt.image} onChange={e=>setNewArt({...newArt, image: e.target.value})} className="w-full border-brutal p-2 focus:outline-none focus:bg-[#CCFF00]/10" />
+                                    <input placeholder="Теги (через запятую: TECHNO, ART)" value={newArt.tagsStr} onChange={e=>setNewArt({...newArt, tagsStr: e.target.value})} className="w-full border-brutal p-2 focus:outline-none" />
                                     <div className="grid grid-cols-2 gap-4">
-                                        <input placeholder="Автор" value={newArt.author} onChange={e=>setNewArt({...newArt, author: e.target.value})} className="w-full border-brutal p-2" />
-                                        <input placeholder="Мин. чтения" value={newArt.readTime} onChange={e=>setNewArt({...newArt, readTime: e.target.value})} className="w-full border-brutal p-2" />
+                                        <input placeholder="Автор" value={newArt.author} onChange={e=>setNewArt({...newArt, author: e.target.value})} className="w-full border-brutal p-2 focus:outline-none" />
+                                        <input placeholder="Мин. чтения (цифра)" value={newArt.readTime} onChange={e=>setNewArt({...newArt, readTime: e.target.value})} className="w-full border-brutal p-2 focus:outline-none" />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4 p-4 border-brutal bg-[#F4F4F0]">
                                         <div>
                                             <p className="font-bold mb-2">РУССКИЙ</p>
-                                            <input placeholder="Категория RU" value={newArt.category_ru} onChange={e=>setNewArt({...newArt, category_ru: e.target.value})} className="w-full border-brutal p-2 mb-2" />
-                                            <input placeholder="Заголовок RU" value={newArt.title_ru} onChange={e=>setNewArt({...newArt, title_ru: e.target.value})} className="w-full border-brutal p-2 mb-2" />
-                                            <textarea placeholder="Лид RU" value={newArt.description_ru} onChange={e=>setNewArt({...newArt, description_ru: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16"></textarea>
-                                            <textarea placeholder="Цитата RU" value={newArt.quote_ru} onChange={e=>setNewArt({...newArt, quote_ru: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16"></textarea>
-                                            <textarea placeholder="Текст RU" value={newArt.content_ru} onChange={e=>setNewArt({...newArt, content_ru: e.target.value})} className="w-full border-brutal p-2 h-32"></textarea>
+                                            <input placeholder="Категория RU" value={newArt.category_ru} onChange={e=>setNewArt({...newArt, category_ru: e.target.value})} className="w-full border-brutal p-2 mb-2 focus:outline-none" />
+                                            <input placeholder="Заголовок RU" value={newArt.title_ru} onChange={e=>setNewArt({...newArt, title_ru: e.target.value})} className="w-full border-brutal p-2 mb-2 focus:outline-none" />
+                                            <textarea placeholder="Лид RU" value={newArt.description_ru} onChange={e=>setNewArt({...newArt, description_ru: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16 focus:outline-none"></textarea>
+                                            <textarea placeholder="Цитата RU" value={newArt.quote_ru} onChange={e=>setNewArt({...newArt, quote_ru: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16 focus:outline-none"></textarea>
+                                            <textarea placeholder="Текст RU (абзацы переносятся через Enter)" value={newArt.content_ru} onChange={e=>setNewArt({...newArt, content_ru: e.target.value})} className="w-full border-brutal p-2 h-32 focus:outline-none"></textarea>
                                         </div>
                                         <div>
                                             <p className="font-bold mb-2">ENGLISH</p>
-                                            <input placeholder="Category EN" value={newArt.category_en} onChange={e=>setNewArt({...newArt, category_en: e.target.value})} className="w-full border-brutal p-2 mb-2" />
-                                            <input placeholder="Title EN" value={newArt.title_en} onChange={e=>setNewArt({...newArt, title_en: e.target.value})} className="w-full border-brutal p-2 mb-2" />
-                                            <textarea placeholder="Lead EN" value={newArt.description_en} onChange={e=>setNewArt({...newArt, description_en: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16"></textarea>
-                                            <textarea placeholder="Quote EN" value={newArt.quote_en} onChange={e=>setNewArt({...newArt, quote_en: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16"></textarea>
-                                            <textarea placeholder="Text EN" value={newArt.content_en} onChange={e=>setNewArt({...newArt, content_en: e.target.value})} className="w-full border-brutal p-2 h-32"></textarea>
+                                            <input placeholder="Category EN" value={newArt.category_en} onChange={e=>setNewArt({...newArt, category_en: e.target.value})} className="w-full border-brutal p-2 mb-2 focus:outline-none" />
+                                            <input placeholder="Title EN" value={newArt.title_en} onChange={e=>setNewArt({...newArt, title_en: e.target.value})} className="w-full border-brutal p-2 mb-2 focus:outline-none" />
+                                            <textarea placeholder="Lead EN" value={newArt.description_en} onChange={e=>setNewArt({...newArt, description_en: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16 focus:outline-none"></textarea>
+                                            <textarea placeholder="Quote EN" value={newArt.quote_en} onChange={e=>setNewArt({...newArt, quote_en: e.target.value})} className="w-full border-brutal p-2 mb-2 h-16 focus:outline-none"></textarea>
+                                            <textarea placeholder="Text EN" value={newArt.content_en} onChange={e=>setNewArt({...newArt, content_en: e.target.value})} className="w-full border-brutal p-2 h-32 focus:outline-none"></textarea>
                                         </div>
                                     </div>
-                                    <button onClick={handleAdd} disabled={isSubmitting} className="w-full bg-[#0033FF] text-white p-3 font-bold uppercase border-brutal border-[#0033FF] hover:bg-black">
-                                        {isSubmitting ? "Сохранение..." : "Опубликовать"}
+                                    <button onClick={handleAddArticle} disabled={isSubmitting} className="w-full bg-[#0033FF] text-white p-3 font-bold uppercase border-brutal border-[#0033FF] hover:bg-black transition-colors">
+                                        {isSubmitting ? "Сохранение..." : "Опубликовать статью"}
                                     </button>
                                 </div>
                                 <div>
                                     <h3 className="font-display text-2xl text-[#FF00FF] mb-6">ОПУБЛИКОВАННОЕ</h3>
                                     {articles.map(a => (
-                                        <div key={a.id} className="border-brutal p-3 flex justify-between items-center mb-2">
-                                            <span className="font-display text-lg uppercase truncate">{getL(a, 'title')}</span>
-                                            <button onClick={() => handleDelete(a.id)} className="text-red-500 hover:bg-red-100 p-1"><Icon name="Trash" size={16}/></button>
+                                        <div key={a.id} className="border-brutal p-3 flex justify-between items-center mb-2 hover:bg-black hover:text-white transition-colors group">
+                                            <span className="font-display text-lg uppercase truncate pr-4">{getL(a, 'title')}</span>
+                                            <button onClick={() => handleDeleteArticle(a.id)} className="text-red-500 hover:text-red-400 p-1 shrink-0"><Icon name="Trash" size={16}/></button>
                                         </div>
                                     ))}
                                 </div>
@@ -505,7 +521,7 @@
                 <div className="min-h-screen flex flex-col">
                     <div className="grain"></div>
                     <Navigation />
-                    {isAdminMode && <AdminPanel />}
+                    {isAdminMode && renderAdminPanel()}
                     <div className="flex-grow">
                         {currentPage === 'home' && <Home />}
                         {currentPage === 'article' && <SingleArticle />}
