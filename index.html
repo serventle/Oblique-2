@@ -55,29 +55,30 @@
 
         .lang-active { color: var(--neon); text-decoration: underline; }
 
-        /* Structured Chaos Grid */
+        /* Clean Editorial Grid */
         .grid-editorial {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
-            gap: 4rem;
+            gap: 5rem;
         }
         @media (min-width: 1024px) {
             .grid-editorial {
                 grid-template-columns: repeat(12, 1fr);
-                gap: 2rem;
+                gap: 4rem 2rem;
             }
-            .item-large { grid-column: span 8; }
-            .item-small { grid-column: span 4; }
-            .item-medium { grid-column: span 6; }
-            .item-full { grid-column: span 12; }
-            
-            .offset-top { margin-top: 6rem; }
-            .offset-bottom { margin-top: -4rem; }
+            /* Позиционирование без наложений */
+            .item-hero-sub { grid-column: 2 / span 10; }
+            .item-left { grid-column: 1 / span 7; }
+            .item-right { grid-column: 8 / span 5; margin-top: 10rem; }
+            .item-center { grid-column: 3 / span 8; }
+            .item-wide { grid-column: 1 / span 12; }
+            .item-split-left { grid-column: 1 / span 5; }
+            .item-split-right { grid-column: 6 / span 7; margin-top: 5rem; }
         }
 
-        .aspect-editorial { aspect-ratio: 4 / 5; }
-        .aspect-wide { aspect-ratio: 16 / 9; }
-        .aspect-square { aspect-ratio: 1 / 1; }
+        .aspect-editorial { aspect-ratio: 4 / 5; object-fit: cover; }
+        .aspect-wide { aspect-ratio: 16 / 9; object-fit: cover; }
+        .aspect-square { aspect-ratio: 1 / 1; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -112,8 +113,8 @@
 
     <!-- MOBILE MENU -->
     <div id="mobile-menu" class="fixed inset-0 bg-white text-black z-[200] p-10 flex flex-col hidden">
-        <div class="flex justify-between items-center border-b-8 border-black pb-6">
-            <span class="text-4xl font-display uppercase tracking-tighter text-black">Oblique</span>
+        <div class="flex justify-between items-center border-b-8 border-black pb-6 text-black">
+            <span class="text-4xl font-display uppercase tracking-tighter">Oblique</span>
             <button onclick="toggleMenu()"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
         <div class="flex flex-col space-y-4 text-6xl font-display uppercase mt-12 text-left text-black">
@@ -189,8 +190,8 @@
         </div>
 
         <!-- ABOUT (MANIFESTO) -->
-        <div id="page-about" class="hidden page-fade">
-            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden text-left">
+        <div id="page-about" class="hidden page-fade text-left">
+            <section class="bg-black text-white min-h-screen p-8 md:p-32 flex flex-col justify-center relative overflow-hidden">
                 <h2 class="text-[25vw] font-display uppercase leading-none text-stroke absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none tracking-tighter">MANIFESTO</h2>
                 <div class="max-w-5xl z-10">
                     <div class="bg-white text-black p-12 md:p-20 mb-20 border-l-[30px] border-[--accent]">
@@ -204,7 +205,7 @@
                         <h4 class="text-[--neon] font-black uppercase tracking-[0.4em] text-xs" data-t="commTitle">Communication</h4>
                         <a href="mailto:oblique.mag@gmail.com" class="text-4xl md:text-7xl font-display hover:text-[--accent] block tracking-tighter italic">oblique.mag@gmail.com</a>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16 text-white text-left">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-40 border-t-4 border-white pt-16 text-white">
                         <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="editorLabel">Editor in Chief</span><span class="text-4xl font-display uppercase">Эльвира Иванникова</span></div>
                         <div><span class="text-[--neon] font-black text-[10px] uppercase block mb-4" data-t="creativeLabel">Creative Direction</span><span class="text-4xl font-display uppercase">Ева Головинцева</span></div>
                     </div>
@@ -225,7 +226,7 @@
             <section class="p-8 md:p-24 bg-black text-white min-h-screen flex flex-col justify-center text-left">
                 <div class="max-w-4xl mx-auto w-full">
                     <h2 class="text-7xl md:text-9xl font-display uppercase mb-16 italic tracking-tighter" data-t="cartTitle">Your Order</h2>
-                    <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10"></div>
+                    <div id="cart-items-list" class="space-y-6 mb-20 border-t-4 border-white pt-10 text-white"></div>
                     <div id="checkout-form-container">
                         <h3 class="text-4xl font-display uppercase mb-10 text-[--neon]" data-t="shippingTitle">Shipping Info</h3>
                         <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4">
@@ -245,8 +246,8 @@
         </div>
 
         <!-- ARCHIVE -->
-        <div id="page-archive" class="hidden page-fade">
-            <section class="p-8 md:p-24 bg-white text-black min-h-screen text-left">
+        <div id="page-archive" class="hidden page-fade text-left">
+            <section class="p-8 md:p-24 bg-white text-black min-h-screen">
                 <h2 class="text-[12vw] font-display uppercase mb-24 tracking-tighter border-b-8 border-black pb-8" data-t="navArchive">Archives</h2>
                 <div id="archive-list" class="grid-editorial mt-12"></div>
             </section>
@@ -385,12 +386,12 @@
 
         const getEditorialClasses = (index) => {
             const pattern = [
-                'item-large', 
-                'item-small offset-top', 
-                'item-medium', 
-                'item-medium offset-bottom', 
-                'item-small', 
-                'item-large offset-top'
+                'item-left', 
+                'item-right', 
+                'item-center', 
+                'item-split-left', 
+                'item-split-right',
+                'item-wide'
             ];
             return pattern[index % pattern.length];
         };
@@ -407,10 +408,10 @@
                 <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
                     <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-8">
                         <img src="${art.image}" class="w-full h-full object-cover img-glitch">
-                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic">${art[currentLang].cat}</div>
+                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic z-10">${art[currentLang].cat}</div>
                     </div>
-                    <div class="max-w-lg">
-                        <h3 class="text-4xl lg:text-6xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+                    <div class="max-w-2xl">
+                        <h3 class="text-5xl lg:text-7xl font-display uppercase leading-none group-hover:text-[--accent] transition-colors tracking-tighter">${art[currentLang].title}</h3>
                         <p class="text-[10px] font-black uppercase opacity-30 mt-4 tracking-widest">Issue 0.1 / Spring 2026</p>
                     </div>
                 </div>
@@ -424,9 +425,11 @@
                 <div class="group cursor-pointer ${getEditorialClasses(index)}" onclick="showArticle('${art.id}')">
                     <div class="relative overflow-hidden border-4 border-black ${getAspectClass(index)} mb-6">
                         <img src="${art.image}" class="w-full h-full object-cover img-glitch">
-                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic">${art[currentLang].cat}</div>
+                        <div class="absolute top-0 right-0 bg-black text-white p-3 font-display text-lg italic z-10">${art[currentLang].cat}</div>
                     </div>
-                    <h3 class="text-3xl lg:text-4xl font-display uppercase leading-none group-hover:text-[--neon] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+                    <div class="max-w-xl">
+                        <h3 class="text-4xl lg:text-5xl font-display uppercase leading-none group-hover:text-[--neon] transition-colors tracking-tighter">${art[currentLang].title}</h3>
+                    </div>
                 </div>
             `).join('');
         }
@@ -443,7 +446,7 @@
                         </div>
                         <h3 class="text-3xl font-display uppercase tracking-tighter">${p[currentLang].name}</h3>
                     </div>
-                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black">
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t-4 border-black text-black">
                         <span class="text-2xl font-black">${p.price} ₸</span>
                         <button onclick="addToCart('${p.id}')" class="btn-brutal p-3 px-6 border-2 border-black">${translations[currentLang].addBtn}</button>
                     </div>
@@ -501,6 +504,7 @@
             document.getElementById('checkout-form-container').classList.add('hidden');
             document.getElementById('cart-items-list').innerHTML = '';
             document.getElementById('checkout-success').classList.remove('hidden');
+            document.getElementById('checkout-success').querySelector('p').innerText = translations[currentLang].successMsg;
             cart = [];
             document.getElementById('cart-count').innerText = '0';
         }
